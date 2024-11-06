@@ -1,0 +1,9 @@
+.ql-toolbar {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.ql-container {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
