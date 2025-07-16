@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import AuthGuard from "@/components/auth/AuthGuard";
 import {
   Box,
   Card,
@@ -45,6 +46,14 @@ interface UserFormData {
 }
 
 export default function UserManagementPage() {
+  return (
+    <AuthGuard requireAuth={true} requiredPermissions={["manage_users"]}>
+      <UserManagementContent />
+    </AuthGuard>
+  );
+}
+
+function UserManagementContent() {
   const { user, hasPermission } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -388,8 +397,8 @@ export default function UserManagementPage() {
                     label="Role"
                   >
                     <MenuItem value="admin">Administrator</MenuItem>
-                    <MenuItem value="editor">Editor</MenuItem>
-                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="editors">Editor</MenuItem>
+                    <MenuItem value="users">User</MenuItem>
                     <MenuItem value="guest">Guest</MenuItem>
                   </Select>
                 </FormControl>

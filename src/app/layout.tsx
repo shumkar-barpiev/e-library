@@ -19,6 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+      </head>
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>

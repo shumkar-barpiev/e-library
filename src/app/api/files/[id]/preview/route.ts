@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Required for static export
+export async function generateStaticParams() {
+  // Return empty array since we can't pre-generate all possible file IDs
+  // This will make the route available but might not work as expected
+  return [];
+}
+
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const fileId = params.id;

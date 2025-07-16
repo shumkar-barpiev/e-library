@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import AuthGuard from "@/components/auth/AuthGuard";
 import {
   Box,
   Grid,
@@ -30,6 +31,14 @@ import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 
 export default function DashboardPage() {
+  return (
+    <AuthGuard requireAuth={true} requiredPermissions={["read"]}>
+      <DashboardContent />
+    </AuthGuard>
+  );
+}
+
+function DashboardContent() {
   const { user, hasPermission } = useAuth();
   const { t } = useTranslation();
   const [stats, setStats] = useState<DashboardStats | null>(null);

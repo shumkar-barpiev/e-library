@@ -280,7 +280,7 @@ export default function PublicFilesPage() {
               <Typography variant="h4" color="primary">
                 {filteredFiles.length}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" component="div">
                 {t("navigation.publicFiles")}
               </Typography>
             </CardContent>
@@ -290,7 +290,7 @@ export default function PublicFilesPage() {
               <Typography variant="h4" color="warning.main">
                 {filteredFolders.length}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" component="div">
                 {t("files.fileName")}
               </Typography>
             </CardContent>
@@ -300,7 +300,7 @@ export default function PublicFilesPage() {
               <Typography variant="h4" color="success.main">
                 {files.reduce((sum, file) => sum + file.downloadCount, 0)}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" component="div">
                 {t("dashboard.fileInfo.downloads")}
               </Typography>
             </CardContent>
@@ -329,7 +329,7 @@ export default function PublicFilesPage() {
                   <Typography variant="h6" gutterBottom noWrap>
                     {folder.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }} component="div">
                     {folder.description}
                   </Typography>
                   <Chip label="Public Folder" size="small" color="success" />
@@ -354,15 +354,15 @@ export default function PublicFilesPage() {
                     {file.originalName}
                   </Typography>
 
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }} component="div">
                     {file.description}
                   </Typography>
 
                   <Box sx={{ mb: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" component="div">
                       {formatFileSize(file.size)} • {formatTimeAgo(file.uploadedAt)}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" component="div">
                       {file.downloadCount} {t("dashboard.fileInfo.downloads")}
                     </Typography>
                   </Box>
@@ -388,10 +388,10 @@ export default function PublicFilesPage() {
         {/* No Results */}
         {filteredFiles.length === 0 && filteredFolders.length === 0 && !loading && (
           <Box sx={{ textAlign: "center", py: 8 }}>
-            <Typography variant="h5" color="text.secondary" gutterBottom>
+            <Typography variant="h5" color="text.secondary" gutterBottom component="div">
               {t("publicFiles.noPublicFiles")}
             </Typography>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant="body1" color="text.secondary" component="div">
               {searchQuery ? t("search.tryDifferentSearch") : t("publicFiles.noPublicFilesDescription")}
             </Typography>
           </Box>
@@ -419,7 +419,7 @@ export default function PublicFilesPage() {
 
         {/* Footer */}
         <Box sx={{ mt: 8, py: 4, textAlign: "center", borderTop: "1px solid", borderColor: "divider" }}>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" component="div">
             © 2024 E-Library Document Management System. All rights reserved.
           </Typography>
         </Box>
