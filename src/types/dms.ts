@@ -1,12 +1,17 @@
-export type UserRole = "admin" | "editor" | "user" | "guest";
+export type UserRole = "admin" | "editors" | "users" | "guest";
 
 export interface User {
   id: number;
   email: string;
+  role: UserRole;
   firstName: string;
   lastName: string;
-  role: UserRole;
   organization?: string;
+  isActive?: boolean; // Add active status
+  avatar?: string | null; // Add avatar field
+  username?: string; // Add username field for Nextcloud
+  displayName?: string; // Add displayName for Nextcloud
+  nextcloudCredentials?: any; // Add Nextcloud credentials storage
   createdAt: Date;
   updatedAt: Date;
 }

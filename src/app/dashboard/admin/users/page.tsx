@@ -56,7 +56,7 @@ export default function UserManagementPage() {
     email: "",
     firstName: "",
     lastName: "",
-    role: "user",
+    role: "users",
     organization: "",
   });
 
@@ -84,7 +84,7 @@ export default function UserManagementPage() {
           email: "editor@company.com",
           firstName: "Jane",
           lastName: "Editor",
-          role: "editor",
+          role: "editors",
           organization: "Content Team",
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 180),
           updatedAt: new Date(),
@@ -94,7 +94,7 @@ export default function UserManagementPage() {
           email: "user@company.com",
           firstName: "John",
           lastName: "User",
-          role: "user",
+          role: "users",
           organization: "Marketing",
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90),
           updatedAt: new Date(),
@@ -145,7 +145,7 @@ export default function UserManagementPage() {
         email: "",
         firstName: "",
         lastName: "",
-        role: "user",
+        role: "users",
         organization: "",
       });
     } else if (type === "delete" && user) {
@@ -162,7 +162,7 @@ export default function UserManagementPage() {
       email: "",
       firstName: "",
       lastName: "",
-      role: "user",
+      role: "users",
       organization: "",
     });
   };
@@ -207,9 +207,9 @@ export default function UserManagementPage() {
     switch (role) {
       case "admin":
         return "error";
-      case "editor":
+      case "editors":
         return "warning";
-      case "user":
+      case "users":
         return "primary";
       case "guest":
         return "default";
@@ -229,8 +229,8 @@ export default function UserManagementPage() {
 
     return [
       { role: "admin", count: stats.admin || 0, label: "Administrators" },
-      { role: "editor", count: stats.editor || 0, label: "Editors" },
-      { role: "user", count: stats.user || 0, label: "Users" },
+      { role: "editors", count: stats.editors || 0, label: "Editors" },
+      { role: "users", count: stats.users || 0, label: "Users" },
       { role: "guest", count: stats.guest || 0, label: "Guests" },
     ];
   };

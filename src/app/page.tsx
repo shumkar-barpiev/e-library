@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { Box, CircularProgress, Typography } from "@mui/material";
 import { LandingPage } from "@/components/landing/LandingPage";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 export default function Home() {
   const { isAuthenticated, loading } = useAuth();
@@ -14,16 +14,13 @@ export default function Home() {
   useEffect(() => {
     if (!loading) {
       if (isAuthenticated) {
-        // If user is authenticated, redirect to dashboard
         router.push("/dashboard");
       } else {
-        // If user is not authenticated, show landing page
         setShowLanding(true);
       }
     }
   }, [isAuthenticated, loading, router]);
 
-  // Show loading while checking authentication
   if (loading) {
     return (
       <Box
@@ -44,11 +41,9 @@ export default function Home() {
     );
   }
 
-  // Show landing page for guests
   if (showLanding) {
     return <LandingPage />;
   }
 
-  // This should not be reached, but keeping as fallback
   return null;
 }

@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Paper, TextField, Button, Typography, Container, Alert } from "@mui/material";
-import { useAuth } from "@/contexts/AuthContext";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
+import { ArrowBack } from "@mui/icons-material";
+import { useAuth } from "@/contexts/AuthContext";
+import React, { useState, useEffect } from "react";
+import { Box, Paper, TextField, Button, Typography, Container, Alert, IconButton } from "@mui/material";
 
 interface LoginFormData {
   username: string;
@@ -58,6 +59,10 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoBack = () => {
+    router.push("/");
+  };
+
   return (
     <Box
       sx={{
@@ -78,14 +83,29 @@ export default function LoginPage() {
             backgroundColor: "white",
             borderRadius: 3,
             border: `1px solid ${customColors.neutral}`,
+            position: "relative",
           }}
         >
+          <IconButton
+            title={t("common.goBack")}
+            onClick={handleGoBack}
+            sx={{
+              position: "absolute",
+              top: 16,
+              left: 16,
+              color: customColors.muted,
+              "&:hover": { color: customColors.primary },
+            }}
+          >
+            <ArrowBack />
+          </IconButton>
+
           <Typography
             component="h1"
             variant="h4"
             align="center"
             gutterBottom
-            sx={{ color: customColors.primary, fontWeight: 700 }}
+            sx={{ color: customColors.primary, fontWeight: 700, mt: 2 }}
           >
             {t("landing.title")}
           </Typography>
@@ -138,6 +158,18 @@ export default function LoginPage() {
               disabled={loading}
             >
               {loading ? t("auth.signingIn") : t("auth.signIn")}
+            </Button>
+
+            <Button
+              fullWidth
+              variant="text"
+              onClick={handleGoBack}
+              sx={{
+                color: customColors.muted,
+                "&:hover": { color: customColors.primary },
+              }}
+            >
+              {t("navigation.home")}
             </Button>
           </Box>
         </Paper>

@@ -23,6 +23,7 @@ import {
   AppBar,
   Toolbar,
   Button,
+  Stack,
 } from "@mui/material";
 import { Search, Download, Share, MoreVert, InsertDriveFile, Folder, Public, Home } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
@@ -235,10 +236,6 @@ export default function PublicFilesPage() {
       {/* Header */}
       <AppBar position="static" color="primary">
         <Toolbar>
-          <Public sx={{ mr: 2 }} />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "white" }}>
-            {t("landing.title")}
-          </Typography>
           <Button color="inherit" startIcon={<Home />} onClick={handleNavigateToHome}>
             {isAuthenticated ? t("navigation.dashboard") : t("navigation.home")}
           </Button>

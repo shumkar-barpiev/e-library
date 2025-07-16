@@ -25,7 +25,10 @@
     "minutes": "минут",
     "hours": "часов",
     "days": "дней",
-    "files": "файлов"
+    "files": "файлов",
+    "or": "или",
+    "retry": "Повторить",
+    "goBack": "Назад"
   },
   "auth": {
     "signIn": "Войти в систему",
@@ -35,7 +38,28 @@
     "invalidCredentials": "Неверные учетные данные. Попробуйте еще раз.",
     "welcomeBack": "Добро пожаловать обратно",
     "noAuthFound": "Аутентификация не найдена",
-    "invalidAuthData": "Неверные данные аутентификации"
+    "invalidAuthData": "Неверные данные аутентификации",
+    "nextcloud": {
+      "title": "Войти через Nextcloud",
+      "signInWithNextcloud": "Войти через Nextcloud",
+      "enterServer": "Введите адрес сервера",
+      "authenticateBrowser": "Аутентификация в браузере",
+      "waitingForAuth": "Ожидание аутентификации",
+      "completed": "Завершено",
+      "serverRequired": "Адрес сервера обязателен",
+      "invalidServerUrl": "Неверный URL сервера",
+      "serverDescription": "Введите URL вашего Nextcloud сервера для продолжения",
+      "serverUrl": "URL сервера Nextcloud",
+      "browserDescription": "Откроется новое окно браузера для аутентификации",
+      "popupInfo": "Если окно не открылось, проверьте настройки блокировки всплывающих окон",
+      "popupBlocked": "Всплывающее окно заблокировано. Разрешите всплывающие окна и попробуйте снова",
+      "waitingMessage": "Ожидание завершения аутентификации...",
+      "waitingDescription": "Пожалуйста, завершите процесс входа в открывшемся окне браузера",
+      "success": "Аутентификация успешна!",
+      "connectionError": "Ошибка подключения к серверу Nextcloud",
+      "authError": "Ошибка аутентификации",
+      "retry": "Попробовать снова"
+    }
   },
   "navigation": {
     "dashboard": "Панель управления",
@@ -97,7 +121,7 @@
       "advancedSearch": "Расширенный поиск",
       "roleBasedAccess": "Доступ на основе ролей",
       "teamCollaboration": "Командная работа",
-      "copyright": "© 2024 Система управления документами E-Library. Все права защищены."
+      "copyright": "ЭКитепкана. Все права защищены."
     }
   },
   "dashboard": {
