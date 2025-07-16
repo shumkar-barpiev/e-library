@@ -1,13 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import { ArrowBack } from "@mui/icons-material";
 import { useAuth } from "@/contexts/AuthContext";
 import React, { useState, useEffect } from "react";
-import { Box, Paper, TextField, Button, Typography, Container, Alert, IconButton, Stack } from "@mui/material";
 import { SmartLogo } from "@/components/common/SmartLogo";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Box, Paper, TextField, Button, Typography, Container, Alert, IconButton, Stack } from "@mui/material";
 
 interface LoginFormData {
   username: string;
@@ -18,6 +18,9 @@ export default function LoginPage() {
   const { login, isAuthenticated, error: authError } = useAuth();
   const { t } = useTranslation();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/dashboard";
+
   const [formData, setFormData] = useState<LoginFormData>({
     username: "",
     password: "",
@@ -28,9 +31,9 @@ export default function LoginPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/dashboard");
+      router.push(redirectTo);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, router, redirectTo]);
 
   // Update local error state when auth error changes
   useEffect(() => {
@@ -51,8 +54,8 @@ export default function LoginPage() {
 
     try {
       await login(formData.username, formData.password);
-      // Redirect will be handled by the auth context effect
-      router.push("/dashboard");
+      // Redirect to the originally requested page or dashboard
+      router.push(redirectTo);
     } catch (err) {
       setError(t("auth.invalidCredentials"));
     } finally {

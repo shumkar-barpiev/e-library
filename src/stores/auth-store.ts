@@ -1,7 +1,7 @@
 import { create } from "zustand";
+import { User, UserRole } from "@/types/dms";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { AuthService, AuthResponse } from "@/services/auth-service";
-import { User, UserRole } from "@/types/dms";
 import { getUserRoleFromNextcloudGroups } from "@/config/nextcloud";
 
 interface AuthState {
@@ -68,6 +68,16 @@ export const useAuthStore = create<AuthStore>()(
               error: null,
               credentials: response.credentials,
             });
+
+            if (typeof window !== "undefined") {
+              document.cookie = `auth-storage=${JSON.stringify({
+                state: {
+                  user,
+                  isAuthenticated: true,
+                  credentials: response.credentials,
+                },
+              })}; path=/; max-age=${7 * 24 * 60 * 60}`; // 7 days
+            }
           } else {
             throw new Error(response.error || "Authentication failed");
           }
@@ -98,6 +108,16 @@ export const useAuthStore = create<AuthStore>()(
           set({
             ...initialState,
           });
+
+          // Manually clear the persisted data from localStorage
+          localStorage.removeItem("auth-storage");
+          localStorage.removeItem("auth_user"); // Legacy key if any
+          localStorage.removeItem("nextcloud_credentials"); // Legacy key if any
+
+          // Clear auth cookie for middleware
+          if (typeof window !== "undefined") {
+            document.cookie = "auth-storage=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+          }
         }
       },
 
