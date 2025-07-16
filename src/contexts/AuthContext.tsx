@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { User, UserRole } from "@/types/dms";
 import { useTranslation } from "react-i18next";
+import { AuthService } from "@/services/auth-service";
+import { getUserRoleFromNextcloudGroups, nextcloudConfig } from "@/config/nextcloud";
 
 interface AuthState {
   user: User | null;
@@ -89,47 +91,89 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dispatch({ type: "AUTH_START" });
 
     try {
-      // TODO: Replace with actual API call
-      // Simulate backend determining user role based on username/password
-      let role: UserRole = "user"; // default role
+      // Check if Nextcloud authentication is enabled
+      if (nextcloudConfig.enabled) {
+        await authenticateWithNextcloud(username, password);
+      } else {
+        // Fall back to mock authentication for development
+        await authenticateWithMock(username, password);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      dispatch({ type: "AUTH_ERROR", payload: t("auth.invalidCredentials") });
+      throw error;
+    }
+  };
 
-      // Mock role assignment based on username (simulate backend logic)
-      if (username.toLowerCase().includes("admin")) {
-        role = "admin";
-      } else if (username.toLowerCase().includes("editor")) {
-        role = "editor";
-      } else if (username.toLowerCase().includes("guest")) {
-        role = "guest";
+  const authenticateWithNextcloud = async (username: string, password: string) => {
+    try {
+      // Use the API route for authentication
+      const authResponse = await AuthService.login(username, password);
+
+      if (!authResponse.success || !authResponse.credentials || !authResponse.userInfo) {
+        throw new Error("Authentication failed");
       }
 
-      const mockUser: User = {
-        id: 1,
-        email: `${username}@example.com`, // Convert username to email format for display
-        firstName: "John",
-        lastName: "Doe",
-        role,
-        organization: "Test Organization",
+      const { credentials, userInfo } = authResponse;
+
+      // Create user object from Nextcloud user info
+      const userRole = getUserRoleFromNextcloudGroups(userInfo.groups || []);
+
+      const user: User = {
+        id: Number(userInfo.id || userInfo.userid) || 1,
+        username: credentials.loginName,
+        email: userInfo.email || userInfo.emailAddress || `${credentials.loginName}@nextcloud`,
+        firstName: userInfo.displayname?.split(" ")[0] || credentials.loginName,
+        lastName: userInfo.displayname?.split(" ").slice(1).join(" ") || "",
+        displayName: userInfo.displayname || credentials.loginName,
+        role: userRole,
+        avatar: userInfo.avatar || null,
+        isActive: true,
         createdAt: new Date(),
         updatedAt: new Date(),
+        nextcloudCredentials: credentials,
       };
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Store user data and credentials
+      localStorage.setItem("auth_user", JSON.stringify(user));
+      localStorage.setItem("nextcloud_credentials", JSON.stringify(credentials));
 
-      // Store in localStorage for persistence
-      localStorage.setItem("auth_user", JSON.stringify(mockUser));
-
-      dispatch({ type: "AUTH_SUCCESS", payload: mockUser });
+      dispatch({ type: "AUTH_SUCCESS", payload: user });
     } catch (error) {
-      dispatch({
-        type: "AUTH_ERROR",
-        payload: error instanceof Error ? error.message : t("auth.invalidCredentials"),
-      });
+      throw new Error(t("auth.invalidCredentials"));
     }
+  };
+
+  const authenticateWithMock = async (username: string, password: string) => {
+    // Mock authentication for development/testing
+    let role: UserRole = "users";
+
+    if (username.toLowerCase().includes("admin")) {
+      role = "admin";
+    } else if (username.toLowerCase().includes("editor")) {
+      role = "editors";
+    }
+
+    const user: User = {
+      id: Math.floor(Math.random() * 1000),
+      username,
+      email: `${username}@example.com`,
+      firstName: username,
+      lastName: "User",
+      displayName: username,
+      role,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    localStorage.setItem("auth_user", JSON.stringify(user));
+    dispatch({ type: "AUTH_SUCCESS", payload: user });
   };
 
   const logout = () => {
     localStorage.removeItem("auth_user");
+    localStorage.removeItem("nextcloud_credentials");
     dispatch({ type: "LOGOUT" });
   };
 
@@ -142,8 +186,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const rolePermissions = {
       admin: ["read", "write", "delete", "manage_users", "manage_system"],
-      editor: ["read", "write", "delete", "approve"],
-      user: ["read", "write"],
+      editors: ["read", "write", "delete", "approve"],
+      users: ["read", "write"],
       guest: ["read"],
     };
 

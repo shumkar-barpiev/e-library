@@ -298,12 +298,12 @@ export const LandingPage: React.FC = () => {
                 </Typography>
               </Box>
               <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, color: "white !important" }}>
-                {t("landing.footerDescription")}
+                {t("landing.footer.description")}
               </Typography>
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography variant="h6" gutterBottom sx={{ color: "white !important" }}>
-                {t("landing.quickLinks")}
+                {t("landing.footer.quickLinks")}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 <Button
@@ -334,20 +334,20 @@ export const LandingPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography variant="h6" gutterBottom sx={{ color: "white !important" }}>
-                {t("landing.features")}
+                {t("landing.footer.features")}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  {t("landing.featureUpload")}
+                  {t("landing.footer.fileUploadDownload")}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  {t("landing.featureSearch")}
+                  {t("landing.footer.advancedSearch")}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  {t("landing.featureAccess")}
+                  {t("landing.footer.roleBasedAccess")}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  {t("landing.featureCollaboration")}
+                  {t("landing.footer.teamCollaboration")}
                 </Typography>
               </Box>
             </Grid>
@@ -357,7 +357,7 @@ export const LandingPage: React.FC = () => {
 
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-              {t("landing.copyright")}
+              {new Date().getFullYear()} © {t("landing.footer.copyright")}
             </Typography>
           </Box>
         </Container>
