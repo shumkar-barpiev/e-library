@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/common/LanguageSelector";
+import { SmartLogo } from "@/components/common/SmartLogo";
 
 interface FeatureCardProps {
   icon: React.ReactElement;
@@ -46,7 +47,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="text.secondary" component="div">
         {description}
       </Typography>
     </CardContent>
@@ -96,7 +97,7 @@ export const LandingPage: React.FC = () => {
       <AppBar position="static" color="primary" elevation={0} sx={{ borderRadius: 0 }}>
         <Toolbar>
           <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-            <Public sx={{ mr: 2, color: "white" }} />
+            <SmartLogo variant="light" size={68} sx={{ mr: 2 }} />
             <Typography variant="h6" component="div" sx={{ color: "white !important" }}>
               {t("landing.title")}
             </Typography>
@@ -292,12 +293,12 @@ export const LandingPage: React.FC = () => {
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <Public sx={{ mr: 1, color: "white" }} />
+                <SmartLogo variant="light" size={42} sx={{ mr: 1 }} />
                 <Typography variant="h6" sx={{ color: "white !important" }}>
                   ЭКитепкана
                 </Typography>
               </Box>
-              <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, color: "white !important" }}>
+              <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, color: "white !important" }} component="div">
                 {t("landing.footer.description")}
               </Typography>
             </Grid>
@@ -337,16 +338,16 @@ export const LandingPage: React.FC = () => {
                 {t("landing.footer.features")}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
+                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }} component="div">
                   {t("landing.footer.fileUploadDownload")}
                 </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
+                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }} component="div">
                   {t("landing.footer.advancedSearch")}
                 </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
+                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }} component="div">
                   {t("landing.footer.roleBasedAccess")}
                 </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
+                <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }} component="div">
                   {t("landing.footer.teamCollaboration")}
                 </Typography>
               </Box>
@@ -356,7 +357,7 @@ export const LandingPage: React.FC = () => {
           <Divider sx={{ my: 4, borderColor: customColors.muted }} />
 
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
+            <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }} component="div">
               {new Date().getFullYear()} © {t("landing.footer.copyright")}
             </Typography>
           </Box>

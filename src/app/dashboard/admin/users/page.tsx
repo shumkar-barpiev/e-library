@@ -388,8 +388,8 @@ export default function UserManagementPage() {
                     label="Role"
                   >
                     <MenuItem value="admin">Administrator</MenuItem>
-                    <MenuItem value="editor">Editor</MenuItem>
-                    <MenuItem value="user">User</MenuItem>
+                    <MenuItem value="editors">Editor</MenuItem>
+                    <MenuItem value="users">User</MenuItem>
                     <MenuItem value="guest">Guest</MenuItem>
                   </Select>
                 </FormControl>

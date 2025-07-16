@@ -38,6 +38,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/common/LanguageSelector";
+import { SmartLogo } from "@/components/common/SmartLogo";
 
 const drawerWidth = 240;
 
@@ -65,43 +66,38 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
       text: t("navigation.dashboard"),
       icon: <DashboardIcon />,
       href: "/dashboard",
-      roles: ["admin", "editor", "user", "guest"],
+      roles: ["admin", "editors", "users"],
     },
     {
       text: t("navigation.fileBrowser"),
       icon: <FolderIcon />,
       href: "/dashboard/files",
-      roles: ["admin", "editor", "user", "guest"],
+      roles: ["admin", "editors", "users"],
     },
     {
       text: t("navigation.uploadFiles"),
       icon: <UploadIcon />,
       href: "/dashboard/upload",
-      roles: ["admin", "editor", "user"],
-    },
-    {
-      text: t("navigation.search"),
-      icon: <SearchIcon />,
-      href: "/dashboard/search",
-      roles: ["admin", "editor", "user", "guest"],
+      roles: ["admin", "editors"],
     },
     {
       text: t("navigation.publicFiles"),
       icon: <PublicIcon />,
       href: "/public-files",
-      roles: ["admin", "editor", "user", "guest"],
+      roles: ["admin", "editors", "users"],
     },
+    {
+      text: t("navigation.search"),
+      icon: <SearchIcon />,
+      href: "/dashboard/search",
+      roles: ["admin", "editors", "users"],
+    },
+
     {
       text: t("navigation.userManagement"),
       icon: <PeopleIcon />,
       href: "/dashboard/admin/users",
       roles: ["admin"],
-    },
-    {
-      text: t("navigation.settings"),
-      icon: <SettingsIcon />,
-      href: "/dashboard/settings",
-      roles: ["admin", "editor", "user"],
     },
   ];
 
@@ -128,17 +124,20 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   const drawer = (
     <div>
       <Toolbar sx={{ borderRadius: 0 }}>
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{
-            color: customColors.primary,
-            fontWeight: 600,
-          }}
-        >
-          ЭКитепкана
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <SmartLogo variant="dark" size={68} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{
+              color: customColors.primary,
+              fontWeight: 600,
+            }}
+          >
+            ЭКитепкана
+          </Typography>
+        </Box>
       </Toolbar>
       <Divider />
       <List>
@@ -219,12 +218,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
           </Typography>
 
           <LanguageSelector />
-
-          <IconButton sx={{ color: "white !important", ml: 2 }}>
-            <Badge badgeContent={4} color="error">
-              <Notifications />
-            </Badge>
-          </IconButton>
 
           <IconButton onClick={handleProfileMenuOpen} sx={{ color: "white !important" }}>
             <Avatar

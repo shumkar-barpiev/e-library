@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 import { ArrowBack } from "@mui/icons-material";
 import { useAuth } from "@/contexts/AuthContext";
 import React, { useState, useEffect } from "react";
-import { Box, Paper, TextField, Button, Typography, Container, Alert, IconButton } from "@mui/material";
+import { Box, Paper, TextField, Button, Typography, Container, Alert, IconButton, Stack } from "@mui/material";
+import { SmartLogo } from "@/components/common/SmartLogo";
 
 interface LoginFormData {
   username: string;
@@ -100,15 +101,18 @@ export default function LoginPage() {
             <ArrowBack />
           </IconButton>
 
-          <Typography
-            component="h1"
-            variant="h4"
-            align="center"
-            gutterBottom
-            sx={{ color: customColors.primary, fontWeight: 700, mt: 2 }}
-          >
-            {t("landing.title")}
-          </Typography>
+          <Stack direction={"row"} alignItems="center" justifyContent={"center"} spacing={1} sx={{ mb: 1 }}>
+            <SmartLogo variant="dark" size={80} />
+            <Typography
+              component="h1"
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{ color: customColors.primary, fontWeight: 700, mt: 2 }}
+            >
+              {t("landing.title")}
+            </Typography>
+          </Stack>
           <Typography variant="h5" align="center" color={customColors.muted} gutterBottom sx={{ mb: 3 }}>
             {t("auth.signIn")}
           </Typography>
