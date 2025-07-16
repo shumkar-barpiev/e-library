@@ -1,3 +1,16 @@
+/* Brand Colors CSS Variables */
+:root {
+  --brand-primary: #0c2c84;
+  --brand-secondary: #3566c5;
+  --brand-accent: #be5e5b;
+  --brand-neutral: #d1d5db;
+  --brand-muted: #677586;
+  --brand-dark: #524e60;
+  --brand-warm: #dbab84;
+  --brand-blue: #2d5397;
+  --brand-charcoal: #444444;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -7,4 +20,30 @@
 html,
 body {
   height: 100%;
+  background-color: #f9fafb;
+  color: var(--brand-charcoal);
+  font-family: "Inter", "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--brand-neutral);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-dark);
 }
