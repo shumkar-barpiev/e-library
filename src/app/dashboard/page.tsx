@@ -1,13 +1,15 @@
-import { Suspense } from "react";
-import Dashboard from "@/components/dashboard/Dashboard";
-import { CurrentUserProvider } from "@/components/account/personal-area/current-user/CurrentUserProvider";
+"use client";
+import React, { Suspense } from "react";
+import { Dashboard } from "@/components/dashboard/Dashboard";
 
-export default function DashboardPage() {
+const page = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <CurrentUserProvider>
+    <div>
+      <Suspense fallback={<div>Loading...</div>}>
         <Dashboard />
-      </CurrentUserProvider>
-    </Suspense>
+      </Suspense>
+    </div>
   );
-}
+};
+
+export default page;
