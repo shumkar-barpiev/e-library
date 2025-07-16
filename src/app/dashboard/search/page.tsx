@@ -44,6 +44,7 @@ import {
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { SearchResult, FileMetadata, Folder as FolderType } from "@/types/dms";
+import { useTranslation } from "react-i18next";
 
 interface SearchFilters {
   fileTypes: string[];
@@ -56,6 +57,7 @@ interface SearchFilters {
 
 export default function SearchPage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -70,13 +72,13 @@ export default function SearchPage() {
   const [selectedItem, setSelectedItem] = useState<{ type: "file" | "folder"; id: number } | null>(null);
 
   const fileTypes = [
-    { value: "pdf", label: "PDF Documents" },
-    { value: "doc", label: "Word Documents" },
-    { value: "xls", label: "Excel Files" },
-    { value: "ppt", label: "Presentations" },
-    { value: "image", label: "Images" },
-    { value: "video", label: "Videos" },
-    { value: "audio", label: "Audio Files" },
+    { value: "pdf", label: t("search.documents") },
+    { value: "doc", label: t("search.documents") },
+    { value: "xls", label: t("search.documents") },
+    { value: "ppt", label: t("search.documents") },
+    { value: "image", label: t("search.images") },
+    { value: "video", label: t("search.videos") },
+    { value: "audio", label: t("search.audio") },
   ];
 
   const availableTags = ["document", "image", "report", "presentation", "financial", "hr", "marketing", "legal"];
@@ -254,7 +256,7 @@ export default function SearchPage() {
     <DashboardLayout>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="h4" gutterBottom>
-          Search Files & Folders
+          {t("search.title")}
         </Typography>
 
         {/* Search Bar */}
@@ -264,7 +266,7 @@ export default function SearchPage() {
               <TextField
                 fullWidth
                 variant="outlined"
-                placeholder="Search for files, folders, or content..."
+                placeholder={t("search.searchPlaceholder")}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && performSearch()}
@@ -278,10 +280,10 @@ export default function SearchPage() {
                 disabled={!query.trim() || loading}
                 sx={{ minWidth: 120 }}
               >
-                {loading ? "Searching..." : "Search"}
+                {loading ? t("common.loading") : t("common.search")}
               </Button>
               <Button variant="outlined" startIcon={<FilterList />} onClick={() => setFiltersOpen(!filtersOpen)}>
-                Filters
+                {t("common.filter")}
               </Button>
             </Box>
           </CardContent>
@@ -292,9 +294,9 @@ export default function SearchPage() {
           <Card sx={{ mb: 3 }}>
             <CardContent>
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-                <Typography variant="h6">Search Filters</Typography>
+                <Typography variant="h6">{t("search.filterByType")}</Typography>
                 <Button startIcon={<Clear />} onClick={clearFilters}>
-                  Clear All
+                  {t("common.cancel")}
                 </Button>
               </Box>
 

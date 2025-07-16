@@ -34,6 +34,7 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { UploadProgress, Folder } from "@/types/dms";
 import { useMetaFileStore } from "@/stores/metafile/metafile";
+import { useTranslation } from "react-i18next";
 
 interface UploadItem extends UploadProgress {
   file: File;
@@ -45,6 +46,7 @@ interface UploadItem extends UploadProgress {
 
 export default function UploadPage() {
   const { user, hasPermission } = useAuth();
+  const { t } = useTranslation();
   const { saveFile, loading, error } = useMetaFileStore();
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -234,7 +236,7 @@ export default function UploadPage() {
   if (!hasPermission("write")) {
     return (
       <DashboardLayout>
-        <Alert severity="error">You don&apos;t have permission to upload files.</Alert>
+        <Alert severity="error">{t("upload.uploadError")}</Alert>
       </DashboardLayout>
     );
   }
@@ -243,7 +245,7 @@ export default function UploadPage() {
     <DashboardLayout>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="h4" gutterBottom>
-          Upload Files
+          {t("upload.title")}
         </Typography>
 
         {error && (
@@ -256,18 +258,18 @@ export default function UploadPage() {
         <Card sx={{ mb: 3 }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              Upload Settings
+              {t("upload.description")}
             </Typography>
 
             <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
               <FormControl sx={{ minWidth: 200 }}>
-                <InputLabel>Destination Folder</InputLabel>
+                <InputLabel>{t("files.folderName")}</InputLabel>
                 <Select
                   value={selectedFolder || ""}
                   onChange={(e) => setSelectedFolder((e.target.value as number) || undefined)}
-                  label="Destination Folder"
+                  label={t("files.folderName")}
                 >
-                  <MenuItem value="">Root Folder</MenuItem>
+                  <MenuItem value="">{t("files.rootFolder")}</MenuItem>
                   {folders.map((folder) => (
                     <MenuItem key={folder.id} value={folder.id}>
                       {folder.name}
@@ -278,7 +280,7 @@ export default function UploadPage() {
 
               <FormControlLabel
                 control={<Switch checked={globalIsPublic} onChange={(e) => setGlobalIsPublic(e.target.checked)} />}
-                label="Make files public"
+                label={t("upload.makePublic")}
               />
             </Box>
 
@@ -292,7 +294,9 @@ export default function UploadPage() {
                   <Chip variant="outlined" label={option} {...getTagProps({ index })} key={option} />
                 ))
               }
-              renderInput={(params) => <TextField {...params} label="Default Tags" placeholder="Add tags..." />}
+              renderInput={(params) => (
+                <TextField {...params} label={t("upload.defaultTags")} placeholder={t("upload.addTags")} />
+              )}
             />
           </CardContent>
         </Card>
@@ -318,10 +322,10 @@ export default function UploadPage() {
             >
               <CloudUpload sx={{ fontSize: 48, color: "primary.main", mb: 2 }} />
               <Typography variant="h6" gutterBottom>
-                Drop files here or click to browse
+                {t("upload.dragDrop")}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Supported formats: PDF, DOC, XLS, PPT, Images, Videos, Audio files
+                {t("upload.supportedFormats")}
               </Typography>
               <input
                 id="file-input"
@@ -340,7 +344,9 @@ export default function UploadPage() {
           <Card>
             <CardContent>
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-                <Typography variant="h6">Upload Queue ({uploadItems.length} files)</Typography>
+                <Typography variant="h6">
+                  {t("upload.selectedFiles")} ({uploadItems.length} {t("common.files")})
+                </Typography>
                 <Button
                   variant="contained"
                   onClick={() => setShowUploadDialog(true)}

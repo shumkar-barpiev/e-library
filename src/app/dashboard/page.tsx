@@ -27,9 +27,11 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { DashboardStats, ActivityLog, FileMetadata } from "@/types/dms";
 import { customColors } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
 export default function DashboardPage() {
   const { user, hasPermission } = useAuth();
+  const { t } = useTranslation();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -155,11 +157,11 @@ export default function DashboardPage() {
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
 
     if (diffInMinutes < 60) {
-      return `${diffInMinutes} minutes ago`;
+      return t("dashboard.fileInfo.timeAgo", { time: `${diffInMinutes} ${t("common.minutes")}` });
     } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)} hours ago`;
+      return t("dashboard.fileInfo.timeAgo", { time: `${Math.floor(diffInMinutes / 60)} ${t("common.hours")}` });
     } else {
-      return `${Math.floor(diffInMinutes / 1440)} days ago`;
+      return t("dashboard.fileInfo.timeAgo", { time: `${Math.floor(diffInMinutes / 1440)} ${t("common.days")}` });
     }
   };
 
@@ -197,11 +199,11 @@ export default function DashboardPage() {
     <DashboardLayout>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="h4" gutterBottom>
-          Welcome back, {user?.firstName}!
+          {t("dashboard.welcomeBack", { name: user?.firstName })}
         </Typography>
 
         <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-          Role: <Chip label={user?.role.toUpperCase()} size="small" />
+          {t("dashboard.role")}: <Chip label={user?.role.toUpperCase()} size="small" />
         </Typography>
 
         {/* Stats Cards */}
@@ -218,7 +220,7 @@ export default function DashboardPage() {
                   <InsertDriveFile sx={{ mr: 2, color: customColors.primary, fontSize: 32 }} />
                   <Box>
                     <Typography color={customColors.muted} gutterBottom>
-                      Total Files
+                      {t("dashboard.stats.totalFiles")}
                     </Typography>
                     <Typography variant="h5" sx={{ color: customColors.charcoal, fontWeight: 600 }}>
                       {stats?.totalFiles.toLocaleString()}
@@ -241,7 +243,7 @@ export default function DashboardPage() {
                   <Folder sx={{ mr: 2, color: customColors.warm, fontSize: 32 }} />
                   <Box>
                     <Typography color={customColors.muted} gutterBottom>
-                      Total Folders
+                      {t("dashboard.stats.totalFolders")}
                     </Typography>
                     <Typography variant="h5" sx={{ color: customColors.charcoal, fontWeight: 600 }}>
                       {stats?.totalFolders}
@@ -264,7 +266,7 @@ export default function DashboardPage() {
                   <TrendingUp sx={{ mr: 2, color: customColors.blue, fontSize: 32 }} />
                   <Box>
                     <Typography color={customColors.muted} gutterBottom>
-                      Storage Used
+                      {t("dashboard.stats.storageUsed")}
                     </Typography>
                     <Typography variant="h5" sx={{ color: customColors.charcoal, fontWeight: 600 }}>
                       {stats && formatFileSize(stats.totalStorage)}
@@ -287,7 +289,7 @@ export default function DashboardPage() {
                   <CloudUpload sx={{ mr: 2, color: customColors.accent, fontSize: 32 }} />
                   <Box>
                     <Typography color={customColors.muted} gutterBottom>
-                      Recent Uploads
+                      {t("dashboard.stats.recentUploads")}
                     </Typography>
                     <Typography variant="h5" sx={{ color: customColors.charcoal, fontWeight: 600 }}>
                       {stats?.recentUploads.length}
@@ -305,7 +307,7 @@ export default function DashboardPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Recent Uploads
+                  {t("dashboard.sections.recentUploads")}
                 </Typography>
                 <List>
                   {stats?.recentUploads.map((file) => (
@@ -336,7 +338,7 @@ export default function DashboardPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Popular Files
+                  {t("dashboard.sections.popularFiles")}
                 </Typography>
                 <List>
                   {stats?.popularFiles.map((file) => (
@@ -368,7 +370,7 @@ export default function DashboardPage() {
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Recent Activity
+                    {t("dashboard.sections.activityLog")}
                   </Typography>
                   <TableContainer>
                     <Table>

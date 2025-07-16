@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { User, UserRole } from "@/types/dms";
+import { useTranslation } from "react-i18next";
 
 interface AuthState {
   user: User | null;
@@ -82,6 +83,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const { t } = useTranslation();
 
   const login = async (username: string, password: string) => {
     dispatch({ type: "AUTH_START" });
@@ -121,7 +123,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       dispatch({
         type: "AUTH_ERROR",
-        payload: error instanceof Error ? error.message : "Login failed",
+        payload: error instanceof Error ? error.message : t("auth.invalidCredentials"),
       });
     }
   };
@@ -157,10 +159,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           const user = JSON.parse(storedUser);
           dispatch({ type: "AUTH_SUCCESS", payload: user });
         } else {
-          dispatch({ type: "AUTH_ERROR", payload: "No authentication found" });
+          dispatch({ type: "AUTH_ERROR", payload: t("auth.noAuthFound") });
         }
       } catch (error) {
-        dispatch({ type: "AUTH_ERROR", payload: "Invalid authentication data" });
+        dispatch({ type: "AUTH_ERROR", payload: t("auth.invalidAuthData") });
       }
     };
 

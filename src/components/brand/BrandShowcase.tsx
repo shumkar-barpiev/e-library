@@ -34,7 +34,7 @@ export const BrandShowcase: React.FC = () => {
         </Box>
         <Typography variant="h6" sx={{ color: customColors.muted, maxWidth: 600, mx: "auto" }}>
           A comprehensive color palette designed for consistency, accessibility, and brand recognition across the
-          E-Library JK
+          ЭКитепкана
         </Typography>
       </Box>
 
