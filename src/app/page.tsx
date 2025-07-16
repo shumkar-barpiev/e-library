@@ -38,7 +38,7 @@ export default function Home() {
       >
         <CircularProgress size={60} />
         <Typography variant="h6" color="text.secondary">
-          Loading E-Library JK...
+          Loading ЭКитепкана...
         </Typography>
       </Box>
     );

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Box, Paper, TextField, Button, Typography, Container, Alert } from "@mui/material";
 import { useAuth } from "@/contexts/AuthContext";
 import { customColors } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
 interface LoginFormData {
   username: string;
@@ -13,6 +14,7 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const { login, isAuthenticated, error: authError } = useAuth();
+  const { t } = useTranslation();
   const router = useRouter();
   const [formData, setFormData] = useState<LoginFormData>({
     username: "",
@@ -50,7 +52,7 @@ export default function LoginPage() {
       // Redirect will be handled by the auth context effect
       router.push("/dashboard");
     } catch (err) {
-      setError("Invalid credentials. Please try again.");
+      setError(t("auth.invalidCredentials"));
     } finally {
       setLoading(false);
     }
@@ -85,10 +87,10 @@ export default function LoginPage() {
             gutterBottom
             sx={{ color: customColors.primary, fontWeight: 700 }}
           >
-            E-Library JK
+            {t("landing.title")}
           </Typography>
           <Typography variant="h5" align="center" color={customColors.muted} gutterBottom sx={{ mb: 3 }}>
-            Sign In
+            {t("auth.signIn")}
           </Typography>
 
           {error && (
@@ -103,7 +105,7 @@ export default function LoginPage() {
               required
               fullWidth
               id="username"
-              label="Username"
+              label={t("auth.username")}
               name="username"
               autoComplete="username"
               autoFocus
@@ -115,7 +117,7 @@ export default function LoginPage() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label={t("auth.password")}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -135,7 +137,7 @@ export default function LoginPage() {
               }}
               disabled={loading}
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? t("auth.signingIn") : t("auth.signIn")}
             </Button>
           </Box>
         </Paper>

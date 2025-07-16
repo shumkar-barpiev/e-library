@@ -27,9 +27,13 @@ import {
 import { Search, Download, Share, MoreVert, InsertDriveFile, Folder, Public, Home } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { FileMetadata, Folder as FolderType } from "@/types/dms";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function PublicFilesPage() {
   const router = useRouter();
+  const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const [files, setFiles] = useState<FileMetadata[]>([]);
   const [folders, setFolders] = useState<FolderType[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -218,17 +222,25 @@ export default function PublicFilesPage() {
     return "📁";
   };
 
+  const handleNavigateToHome = () => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "grey.50" }}>
       {/* Header */}
       <AppBar position="static" color="primary">
         <Toolbar>
           <Public sx={{ mr: 2 }} />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Public Files - E-Library JK
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "white" }}>
+            {t("landing.title")}
           </Typography>
-          <Button color="inherit" startIcon={<Home />} onClick={() => router.push("/dashboard")}>
-            Dashboard
+          <Button color="inherit" startIcon={<Home />} onClick={handleNavigateToHome}>
+            {isAuthenticated ? t("navigation.dashboard") : t("navigation.home")}
           </Button>
         </Toolbar>
       </AppBar>
@@ -237,10 +249,10 @@ export default function PublicFilesPage() {
         {/* Welcome Section */}
         <Box sx={{ mb: 4, textAlign: "center" }}>
           <Typography variant="h3" gutterBottom>
-            Public Document Library
+            {t("publicFiles.title")}
           </Typography>
           <Typography variant="h6" color="text.secondary" gutterBottom>
-            Access publicly available documents and resources
+            {t("publicFiles.description")}
           </Typography>
         </Box>
 
@@ -250,7 +262,7 @@ export default function PublicFilesPage() {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Search public files and folders..."
+              placeholder={t("files.search")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               InputProps={{
@@ -272,7 +284,7 @@ export default function PublicFilesPage() {
                 {filteredFiles.length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Public Files
+                {t("navigation.publicFiles")}
               </Typography>
             </CardContent>
           </Card>
@@ -282,7 +294,7 @@ export default function PublicFilesPage() {
                 {filteredFolders.length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Folders
+                {t("files.fileName")}
               </Typography>
             </CardContent>
           </Card>
@@ -292,7 +304,7 @@ export default function PublicFilesPage() {
                 {files.reduce((sum, file) => sum + file.downloadCount, 0)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Total Downloads
+                {t("dashboard.fileInfo.downloads")}
               </Typography>
             </CardContent>
           </Card>
@@ -354,7 +366,7 @@ export default function PublicFilesPage() {
                       {formatFileSize(file.size)} • {formatTimeAgo(file.uploadedAt)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {file.downloadCount} downloads
+                      {file.downloadCount} {t("dashboard.fileInfo.downloads")}
                     </Typography>
                   </Box>
 
@@ -368,7 +380,7 @@ export default function PublicFilesPage() {
                   )}
 
                   <Button variant="contained" startIcon={<Download />} fullWidth onClick={() => handleDownload(file)}>
-                    Download
+                    {t("common.download")}
                   </Button>
                 </CardContent>
               </Card>
@@ -380,10 +392,10 @@ export default function PublicFilesPage() {
         {filteredFiles.length === 0 && filteredFolders.length === 0 && !loading && (
           <Box sx={{ textAlign: "center", py: 8 }}>
             <Typography variant="h5" color="text.secondary" gutterBottom>
-              No public files found
+              {t("publicFiles.noPublicFiles")}
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              {searchQuery ? "Try adjusting your search terms" : "No public files are currently available"}
+              {searchQuery ? t("search.tryDifferentSearch") : t("publicFiles.noPublicFilesDescription")}
             </Typography>
           </Box>
         )}
@@ -400,7 +412,7 @@ export default function PublicFilesPage() {
             }}
           >
             <Download sx={{ mr: 1 }} />
-            Download
+            {t("common.download")}
           </MenuItem>
           <MenuItem onClick={handleMenuClose}>
             <Share sx={{ mr: 1 }} />

@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import React from "react";
 import {
   Box,
@@ -28,6 +30,8 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { customColors } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/common/LanguageSelector";
 
 interface FeatureCardProps {
   icon: React.ReactElement;
@@ -51,51 +55,39 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
 
 export const LandingPage: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const features = [
     {
       icon: <CloudUpload />,
-      title: "Easy File Upload",
-      description:
-        "Drag and drop files or browse to upload. Support for all major file formats including documents, images, videos, and more.",
+      title: t("landing.features.easyUpload.title"),
+      description: t("landing.features.easyUpload.description"),
     },
     {
       icon: <Search />,
-      title: "Powerful Search",
-      description:
-        "Find files instantly with advanced search and filtering. Search by name, content, tags, file type, or date range.",
+      title: t("landing.features.powerfulSearch.title"),
+      description: t("landing.features.powerfulSearch.description"),
     },
     {
       icon: <Security />,
-      title: "Secure & Private",
-      description:
-        "Role-based access control ensures your files are secure. Control who can view, edit, or download your documents.",
+      title: t("landing.features.secure.title"),
+      description: t("landing.features.secure.description"),
     },
     {
       icon: <Speed />,
-      title: "Fast Performance",
-      description:
-        "Built with modern technology for lightning-fast file operations. Quick previews and instant downloads.",
+      title: t("landing.features.performance.title"),
+      description: t("landing.features.performance.description"),
     },
     {
       icon: <Folder />,
-      title: "Smart Organization",
-      description:
-        "Organize files in folders with tags and metadata. Create custom folder structures that work for your team.",
+      title: t("landing.features.organization.title"),
+      description: t("landing.features.organization.description"),
     },
     {
       icon: <People />,
-      title: "Team Collaboration",
-      description:
-        "Share files and folders with team members. Track downloads and manage permissions for better collaboration.",
+      title: t("landing.features.collaboration.title"),
+      description: t("landing.features.collaboration.description"),
     },
-  ];
-
-  const stats = [
-    { number: "1,000+", label: "Files Managed" },
-    { number: "50+", label: "Active Users" },
-    { number: "99.9%", label: "Uptime" },
-    { number: "15GB+", label: "Storage Used" },
   ];
 
   return (
@@ -106,20 +98,22 @@ export const LandingPage: React.FC = () => {
           <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
             <Public sx={{ mr: 2, color: "white" }} />
             <Typography variant="h6" component="div" sx={{ color: "white !important" }}>
-              E-Library JK
+              {t("landing.title")}
             </Typography>
           </Box>
+          <LanguageSelector />
           <Button
             color="inherit"
             startIcon={<Public />}
             onClick={() => router.push("/public-files")}
             sx={{
               mr: 1,
+              ml: 2,
               color: "white !important",
               "&:hover": { backgroundColor: "rgba(255,255,255,0.1)" },
             }}
           >
-            Public Files
+            {t("navigation.publicFiles")}
           </Button>
           <Button
             color="inherit"
@@ -130,7 +124,7 @@ export const LandingPage: React.FC = () => {
               "&:hover": { backgroundColor: "rgba(255,255,255,0.1)" },
             }}
           >
-            Sign In
+            {t("common.login")}
           </Button>
         </Toolbar>
       </AppBar>
@@ -155,7 +149,7 @@ export const LandingPage: React.FC = () => {
               textShadow: "0 2px 4px rgba(0,0,0,0.3)",
             }}
           >
-            Modern Document Management
+            {t("landing.heroTitle")}
           </Typography>
           <Typography
             variant="h5"
@@ -168,8 +162,7 @@ export const LandingPage: React.FC = () => {
               textShadow: "0 1px 2px rgba(0,0,0,0.2)",
             }}
           >
-            Organize, share, and manage your files with our powerful, secure, and user-friendly document management
-            system
+            {t("landing.heroSubtitle")}
           </Typography>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
             <Button
@@ -185,7 +178,7 @@ export const LandingPage: React.FC = () => {
                 py: 1.5,
               }}
             >
-              Browse Public Files
+              {t("landing.browsePublicFiles")}
             </Button>
             <Button
               variant="outlined"
@@ -203,36 +196,20 @@ export const LandingPage: React.FC = () => {
                 py: 1.5,
               }}
             >
-              Sign In
+              {t("auth.signIn")}
             </Button>
           </Box>
         </Container>
       </Box>
 
-      {/* Stats Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Grid container spacing={4} sx={{ textAlign: "center" }}>
-          {stats.map((stat, index) => (
-            <Grid item xs={6} md={3} key={index}>
-              <Typography variant="h3" color="primary" fontWeight="bold">
-                {stat.number}
-              </Typography>
-              <Typography variant="body1" color="text.secondary">
-                {stat.label}
-              </Typography>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
       {/* Features Section */}
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Box sx={{ textAlign: "center", mb: 8 }}>
           <Typography variant="h3" component="h2" gutterBottom fontWeight="bold">
-            Everything You Need
+            {t("landing.features.title")}
           </Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, mx: "auto" }}>
-            Powerful features designed to make document management simple, secure, and efficient for teams of any size
+            {t("landing.features.subtitle")}
           </Typography>
         </Box>
 
@@ -258,7 +235,7 @@ export const LandingPage: React.FC = () => {
               textShadow: "0 1px 3px rgba(0,0,0,0.2)",
             }}
           >
-            Ready to Get Started?
+            {t("landing.cta.title")}
           </Typography>
           <Typography
             variant="h6"
@@ -269,7 +246,7 @@ export const LandingPage: React.FC = () => {
               textShadow: "0 1px 2px rgba(0,0,0,0.1)",
             }}
           >
-            Join our document management system and experience the power of organized, secure file storage
+            {t("landing.cta.subtitle")}
           </Typography>
           <Box sx={{ display: "flex", gap: 2, justifyContent: "center", flexWrap: "wrap" }}>
             <Button
@@ -285,7 +262,7 @@ export const LandingPage: React.FC = () => {
                 py: 1.5,
               }}
             >
-              Access Dashboard
+              {t("landing.cta.accessDashboard")}
             </Button>
             <Button
               variant="outlined"
@@ -303,7 +280,7 @@ export const LandingPage: React.FC = () => {
                 py: 1.5,
               }}
             >
-              View Public Files
+              {t("landing.cta.viewPublicFiles")}
             </Button>
           </Box>
         </Container>
@@ -317,17 +294,16 @@ export const LandingPage: React.FC = () => {
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Public sx={{ mr: 1, color: "white" }} />
                 <Typography variant="h6" sx={{ color: "white !important" }}>
-                  E-Library JK
+                  ЭКитепкана
                 </Typography>
               </Box>
               <Typography variant="body2" sx={{ opacity: 0.8, mb: 2, color: "white !important" }}>
-                A modern, secure, and user-friendly document management system designed for teams and organizations of
-                all sizes.
+                {t("landing.footerDescription")}
               </Typography>
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography variant="h6" gutterBottom sx={{ color: "white !important" }}>
-                Quick Links
+                {t("landing.quickLinks")}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 <Button
@@ -340,7 +316,7 @@ export const LandingPage: React.FC = () => {
                   }}
                   onClick={() => router.push("/public-files")}
                 >
-                  Public Files
+                  {t("navigation.publicFiles")}
                 </Button>
                 <Button
                   color="inherit"
@@ -352,26 +328,26 @@ export const LandingPage: React.FC = () => {
                   }}
                   onClick={() => router.push("/login")}
                 >
-                  Sign In
+                  {t("common.signIn")}
                 </Button>
               </Box>
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography variant="h6" gutterBottom sx={{ color: "white !important" }}>
-                Features
+                {t("landing.features")}
               </Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  File Upload & Download
+                  {t("landing.featureUpload")}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  Advanced Search
+                  {t("landing.featureSearch")}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  Role-based Access
+                  {t("landing.featureAccess")}
                 </Typography>
                 <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-                  Team Collaboration
+                  {t("landing.featureCollaboration")}
                 </Typography>
               </Box>
             </Grid>
@@ -381,7 +357,7 @@ export const LandingPage: React.FC = () => {
 
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="body2" sx={{ opacity: 0.8, color: "white !important" }}>
-              © 2024 E-Library Document Management System. All rights reserved.
+              {t("landing.copyright")}
             </Typography>
           </Box>
         </Container>

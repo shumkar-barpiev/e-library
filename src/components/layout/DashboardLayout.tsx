@@ -36,6 +36,8 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { customColors } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/common/LanguageSelector";
 
 const drawerWidth = 240;
 
@@ -50,57 +52,58 @@ interface NavigationItem {
   roles: string[];
 }
 
-const navigationItems: NavigationItem[] = [
-  {
-    text: "Dashboard",
-    icon: <DashboardIcon />,
-    href: "/dashboard",
-    roles: ["admin", "editor", "user", "guest"],
-  },
-  {
-    text: "File Browser",
-    icon: <FolderIcon />,
-    href: "/dashboard/files",
-    roles: ["admin", "editor", "user", "guest"],
-  },
-  {
-    text: "Upload Files",
-    icon: <UploadIcon />,
-    href: "/dashboard/upload",
-    roles: ["admin", "editor", "user"],
-  },
-  {
-    text: "Search",
-    icon: <SearchIcon />,
-    href: "/dashboard/search",
-    roles: ["admin", "editor", "user", "guest"],
-  },
-  {
-    text: "Public Files",
-    icon: <PublicIcon />,
-    href: "/public-files",
-    roles: ["admin", "editor", "user", "guest"],
-  },
-  {
-    text: "User Management",
-    icon: <PeopleIcon />,
-    href: "/dashboard/admin/users",
-    roles: ["admin"],
-  },
-  {
-    text: "Settings",
-    icon: <SettingsIcon />,
-    href: "/dashboard/settings",
-    roles: ["admin", "editor", "user"],
-  },
-];
-
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout, hasPermission } = useAuth();
+  const { t } = useTranslation();
+
+  const navigationItems: NavigationItem[] = [
+    {
+      text: t("navigation.dashboard"),
+      icon: <DashboardIcon />,
+      href: "/dashboard",
+      roles: ["admin", "editor", "user", "guest"],
+    },
+    {
+      text: t("navigation.fileBrowser"),
+      icon: <FolderIcon />,
+      href: "/dashboard/files",
+      roles: ["admin", "editor", "user", "guest"],
+    },
+    {
+      text: t("navigation.uploadFiles"),
+      icon: <UploadIcon />,
+      href: "/dashboard/upload",
+      roles: ["admin", "editor", "user"],
+    },
+    {
+      text: t("navigation.search"),
+      icon: <SearchIcon />,
+      href: "/dashboard/search",
+      roles: ["admin", "editor", "user", "guest"],
+    },
+    {
+      text: t("navigation.publicFiles"),
+      icon: <PublicIcon />,
+      href: "/public-files",
+      roles: ["admin", "editor", "user", "guest"],
+    },
+    {
+      text: t("navigation.userManagement"),
+      icon: <PeopleIcon />,
+      href: "/dashboard/admin/users",
+      roles: ["admin"],
+    },
+    {
+      text: t("navigation.settings"),
+      icon: <SettingsIcon />,
+      href: "/dashboard/settings",
+      roles: ["admin", "editor", "user"],
+    },
+  ];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -124,7 +127,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 
   const drawer = (
     <div>
-      <Toolbar>
+      <Toolbar sx={{ borderRadius: 0 }}>
         <Typography
           variant="h6"
           noWrap
@@ -134,7 +137,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             fontWeight: 600,
           }}
         >
-          E-Library JK
+          ЭКитепкана
         </Typography>
       </Toolbar>
       <Divider />
@@ -212,10 +215,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               color: "white !important",
             }}
           >
-            Document Management System
+            {t("dashboard.title")}
           </Typography>
 
-          <IconButton sx={{ color: "white !important" }}>
+          <LanguageSelector />
+
+          <IconButton sx={{ color: "white !important", ml: 2 }}>
             <Badge badgeContent={4} color="error">
               <Notifications />
             </Badge>
@@ -252,7 +257,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               <ListItemIcon>
                 <AccountCircle fontSize="small" />
               </ListItemIcon>
-              Profile
+              {t("common.profile")}
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -263,14 +268,14 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               <ListItemIcon>
                 <SettingsIcon fontSize="small" />
               </ListItemIcon>
-              Settings
+              {t("common.settings")}
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
-              Logout
+              {t("common.logout")}
             </MenuItem>
           </Menu>
         </Toolbar>
@@ -289,6 +294,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
             },
           }}
         >
@@ -301,6 +308,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
             },
           }}
           open

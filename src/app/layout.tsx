@@ -5,9 +5,10 @@ import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/styles/theme";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { I18nProvider } from "@/components/providers/I18nProvider";
 
 export const metadata: Metadata = {
-  title: "E-Library JK",
+  title: "ЭКитепкана",
   description: "Document Management System for E-Library",
 };
 
@@ -21,7 +22,9 @@ export default function RootLayout({
       <body>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <AuthProvider>{children}</AuthProvider>
+            <I18nProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </I18nProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
