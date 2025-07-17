@@ -1,44 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  AppBar,
-  Box,
-  CssBaseline,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-  Menu,
-  MenuItem,
-  Avatar,
-  Divider,
-  Badge,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Dashboard as DashboardIcon,
-  Folder as FolderIcon,
-  CloudUpload as UploadIcon,
-  Search as SearchIcon,
-  People as PeopleIcon,
-  Settings as SettingsIcon,
-  Public as PublicIcon,
-  AccountCircle,
-  Notifications,
-  Logout,
-} from "@mui/icons-material";
-import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
-import { LanguageSelector } from "@/components/common/LanguageSelector";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter, usePathname } from "next/navigation";
 import { SmartLogo } from "@/components/common/SmartLogo";
+import { LanguageSelector } from "@/components/common/LanguageSelector";
+import { AppBar, Box, CssBaseline, Drawer, IconButton } from "@mui/material";
+import { Toolbar, Typography, Menu, MenuItem, Avatar, Divider } from "@mui/material";
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Menu as MenuIcon, Dashboard as DashboardIcon, Folder as FolderIcon } from "@mui/icons-material";
+import { CloudUpload as UploadIcon, Search as SearchIcon, People as PeopleIcon } from "@mui/icons-material";
+import { Settings as SettingsIcon, Public as PublicIcon, AccountCircle, Logout } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -174,7 +148,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 sx={{
                   "& .MuiListItemText-primary": {
                     color: pathname === item.href ? customColors.primary : customColors.charcoal,
-                    fontWeight: pathname === item.href ? 600 : 400,
+                    fontWeight: pathname === item.href ? 800 : 500,
                   },
                 }}
               />

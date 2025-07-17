@@ -81,7 +81,16 @@ export default function SearchPage() {
     { value: "audio", label: t("search.audio") },
   ];
 
-  const availableTags = ["document", "image", "report", "presentation", "financial", "hr", "marketing", "legal"];
+  const availableTags = [
+    t("search.tags.document"),
+    t("search.tags.image"),
+    t("search.tags.report"),
+    t("search.tags.presentation"),
+    t("search.tags.financial"),
+    t("search.tags.hr"),
+    t("search.tags.marketing"),
+    t("search.tags.legal"),
+  ];
 
   const performSearch = async () => {
     if (!query.trim()) return;
@@ -304,7 +313,7 @@ export default function SearchPage() {
                 {/* File Types */}
                 <Grid item xs={12} md={6}>
                   <Typography variant="subtitle1" gutterBottom>
-                    File Types
+                    {t("search.fileTypes")}
                   </Typography>
                   {fileTypes.map((type) => (
                     <FormControlLabel
@@ -328,21 +337,21 @@ export default function SearchPage() {
                 {/* Other Filters */}
                 <Grid item xs={12} md={6}>
                   <Typography variant="subtitle1" gutterBottom>
-                    Other Filters
+                    {t("search.otherFilters")}
                   </Typography>
 
                   <FormControl fullWidth sx={{ mb: 2 }}>
-                    <InputLabel>Date Range</InputLabel>
+                    <InputLabel>{t("search.dateRange")}</InputLabel>
                     <Select
                       value={filters.dateRange}
                       onChange={(e) => handleFilterChange("dateRange", e.target.value)}
-                      label="Date Range"
+                      label={t("search.dateRange")}
                     >
-                      <MenuItem value="all">All Time</MenuItem>
-                      <MenuItem value="today">Today</MenuItem>
-                      <MenuItem value="week">This Week</MenuItem>
-                      <MenuItem value="month">This Month</MenuItem>
-                      <MenuItem value="year">This Year</MenuItem>
+                      <MenuItem value="all">{t("search.dateRangeAll")}</MenuItem>
+                      <MenuItem value="today">{t("search.dateRangeToday")}</MenuItem>
+                      <MenuItem value="week">{t("search.dateRangeWeek")}</MenuItem>
+                      <MenuItem value="month">{t("search.dateRangeMonth")}</MenuItem>
+                      <MenuItem value="year">{t("search.dateRangeYear")}</MenuItem>
                     </Select>
                   </FormControl>
 
@@ -353,14 +362,14 @@ export default function SearchPage() {
                         onChange={(e) => handleFilterChange("isPublic", e.target.checked ? true : undefined)}
                       />
                     }
-                    label="Public files only"
+                    label={t("search.publicFilesOnly")}
                   />
                 </Grid>
 
                 {/* Tags */}
                 <Grid item xs={12}>
                   <Typography variant="subtitle1" gutterBottom>
-                    Tags
+                    {t("search.tagsTitle")}
                   </Typography>
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                     {availableTags.map((tag) => (
@@ -389,17 +398,17 @@ export default function SearchPage() {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Search Results for &quot;{searchResults.query}&quot;
+                {t("search.resultsFor", { query: searchResults.query })}
               </Typography>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                {searchResults.totalCount} results found
+                {t("search.resultsFound", { count: searchResults.totalCount })}
               </Typography>
 
               {/* Folders */}
               {searchResults.folders.length > 0 && (
                 <>
                   <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
-                    Folders
+                    {t("search.folders")}
                   </Typography>
                   <List>
                     {searchResults.folders.map((folder) => (
@@ -443,7 +452,7 @@ export default function SearchPage() {
               {searchResults.files.length > 0 && (
                 <>
                   <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Files
+                    {t("search.files")}
                   </Typography>
                   <List>
                     {searchResults.files.map((file) => (
@@ -488,10 +497,10 @@ export default function SearchPage() {
               {searchResults.totalCount === 0 && (
                 <Box sx={{ textAlign: "center", py: 4 }}>
                   <Typography variant="h6" color="text.secondary">
-                    No results found
+                    {t("search.noResults")}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Try adjusting your search terms or filters
+                    {t("search.tryAdjusting")}
                   </Typography>
                 </Box>
               )}
@@ -517,13 +526,13 @@ export default function SearchPage() {
             <ListItemIcon>
               <Download fontSize="small" />
             </ListItemIcon>
-            Download
+            {t("common.download")}
           </MenuItem>
           <MenuItem onClick={handleMenuClose}>
             <ListItemIcon>
               <Share fontSize="small" />
             </ListItemIcon>
-            Share
+            {t("common.share")}
           </MenuItem>
         </Menu>
       </Box>

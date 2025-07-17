@@ -128,6 +128,16 @@
     "title": "Система управления документами",
     "welcomeBack": "Добро пожаловать обратно, {{name}}!",
     "role": "Роль",
+    "status": {
+      "dataSource": "Источник данных",
+      "nextcloudConnected": "Nextcloud подключен",
+      "usingMockData": "Используются тестовые данные",
+      "nextcloudTooltip": "Данные в реальном времени из Nextcloud Files API",
+      "refresh": "Обновить данные",
+      "mockFallback": "Используются тестовые данные как резерв.",
+      "showingRecent": "Показаны недавние файлы из Nextcloud согласно вашим правам доступа.",
+      "notAvailable": "Нет подключения к Nextcloud. Отображаются демонстрационные данные."
+    },
     "stats": {
       "totalFiles": "Всего файлов",
       "totalFolders": "Всего папок",
@@ -135,6 +145,8 @@
       "recentUploads": "Недавние загрузки"
     },
     "sections": {
+      "recentFilesLive": "Недавние файлы (Live из Nextcloud)",
+      "recentUploadsSample": "Недавние загрузки (Тестовые данные)",
       "recentUploads": "Недавние загрузки",
       "popularFiles": "Популярные файлы",
       "activityLog": "Журнал активности"
@@ -143,7 +155,15 @@
       "uploadedBy": "Загружено",
       "size": "Размер",
       "downloads": "Скачиваний",
-      "timeAgo": "{{time}} назад"
+      "timeAgo": "{{time}} назад",
+      "public": "Публичный"
+    },
+    "activity": {
+      "action": "Действие",
+      "resource": "Ресурс",
+      "user": "Пользователь",
+      "userLabel": "Пользователь {{id}}",
+      "time": "Время"
     },
     "actions": {
       "upload": "загрузка",
@@ -170,7 +190,9 @@
     "creating": "Создание...",
     "uploading": "Загрузка...",
     "selectFile": "Выберите файл",
-    "rootFolder": "Корневая папка"
+    "rootFolder": "Корневая папка",
+    "filterByType": "Фильтр по типу",
+    "allTypes": "Все типы"
   },
   "upload": {
     "title": "Загрузить файлы",
@@ -240,11 +262,15 @@
   "settings": {
     "title": "Настройки",
     "description": "Настройте параметры вашей учетной записи",
-    "profile": "Профиль",
-    "firstName": "Имя",
-    "lastName": "Фамилия",
-    "email": "Email",
-    "organization": "Организация",
+    "profile": {
+      "title": "Профиль",
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "email": "Электронная почта",
+      "organization": "Организация",
+      "changeAvatar": "Сменить аватар",
+      "save": "Сохранить профиль"
+    },
     "preferences": "Предпочтения",
     "language": "Язык",
     "notifications": "Уведомления",
@@ -255,6 +281,12 @@
     "languages": {
       "ru": "Русский",
       "kg": "Кыргызча"
+    },
+    "tabs": {
+      "profile": "Профиль",
+      "notifications": "Уведомления",
+      "preferences": "Предпочтения",
+      "security": "Безопасность"
     }
   },
   "errors": {
