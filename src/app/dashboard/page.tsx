@@ -1,17 +1,17 @@
 "use client";
 
+import React from "react";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
-import React from "react";
 import AuthGuard from "@/components/auth/AuthGuard";
+import { useDashboardData } from "@/hooks/useDashboardData";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Box, Grid, Card, CardContent, Typography, List } from "@mui/material";
+import { NextcloudStatusWidget } from "@/components/dashboard/NextcloudStatusWidget";
 import { ListItem, ListItemText, ListItemIcon, Chip, LinearProgress } from "@mui/material";
 import { InsertDriveFile, Folder, CloudUpload, Download, TrendingUp } from "@mui/icons-material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar } from "@mui/material";
-import { useDashboardData } from "@/hooks/useDashboardData";
-import { NextcloudStatusWidget } from "@/components/dashboard/NextcloudStatusWidget";
 
 export default function DashboardPage() {
   return (

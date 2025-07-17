@@ -54,7 +54,7 @@ export class NextcloudFilesService {
   }
 
   /**
-   * Test connection to Nextcloud server using WebDAV
+   * Test connection to Nextcloud server using WebDAV via API proxy
    */
   async testConnection(): Promise<boolean> {
     if (!this.credentials) {
@@ -63,26 +63,13 @@ export class NextcloudFilesService {
     }
 
     try {
-      console.log("Testing Nextcloud WebDAV connection directly");
-
-      const webdavUrl = `${nextcloudConfig.defaultServerUrl}/remote.php/dav/files/${this.credentials.username}/`;
-
-      const response = await fetch(webdavUrl, {
-        method: "PROPFIND",
+      const response = await fetch("/api/nextcloud/test-connection", {
+        method: "POST",
         headers: {
           Authorization: this.getAuthHeader(),
-          "Content-Type": "application/xml",
-          Depth: "0", // Just test the root directory
+          "Content-Type": "application/json",
         },
-        body: `<?xml version="1.0"?>
-          <d:propfind xmlns:d="DAV:">
-            <d:prop>
-              <d:displayname />
-            </d:prop>
-          </d:propfind>`,
       });
-
-      console.log("WebDAV connection test response status:", response.status);
 
       if (response.status === 401) {
         console.warn("Authentication failed - invalid credentials");
@@ -100,14 +87,12 @@ export class NextcloudFilesService {
       }
 
       const success = response.ok;
-      console.log("Nextcloud WebDAV connection test:", success ? "SUCCESS" : "FAILED");
-
       if (!success) {
-        const errorText = await response.text().catch(() => "");
+        const errorData = await response.json().catch(() => ({}));
         console.error("Connection test error details:", {
           status: response.status,
           statusText: response.statusText,
-          response: errorText.slice(0, 200), // First 200 chars of response
+          error: errorData.error || "Unknown error",
         });
       }
 
@@ -119,7 +104,7 @@ export class NextcloudFilesService {
   }
 
   /**
-   * Get recent files using WebDAV PROPFIND to query actual file system metadata
+   * Get recent files using WebDAV PROPFIND via API proxy
    */
   async getRecentFiles(limit: number = 10, hoursBack: number = 24): Promise<RecentFile[]> {
     if (!this.hasCredentials()) {
@@ -127,34 +112,17 @@ export class NextcloudFilesService {
     }
 
     try {
-      const webdavUrl = `${nextcloudConfig.defaultServerUrl}/remote.php/dav/files/${this.credentials!.username}/`;
-
-      // PROPFIND request to get all files recursively
-      const propfindBody = `<?xml version="1.0"?>
-        <d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
-          <d:prop>
-            <d:displayname />
-            <d:getcontentlength />
-            <d:getcontenttype />
-            <d:getlastmodified />
-            <d:resourcetype />
-            <d:getetag />
-            <oc:fileid />
-          </d:prop>
-        </d:propfind>`;
-
-      const response = await fetch(webdavUrl, {
-        method: "PROPFIND",
+      const response = await fetch(`/api/nextcloud/recent-files?limit=${limit}&hours=${hoursBack}`, {
+        method: "GET",
         headers: {
           Authorization: this.getAuthHeader(),
-          "Content-Type": "application/xml",
-          Depth: "infinity", // Get all files recursively
+          "Content-Type": "application/json",
         },
-        body: propfindBody,
       });
 
       if (!response.ok) {
-        throw new Error(`WebDAV request failed: ${response.status} ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`API request failed: ${response.status} ${errorData.error || response.statusText}`);
       }
 
       const xmlText = await response.text();
@@ -193,7 +161,6 @@ export class NextcloudFilesService {
           })
         );
 
-      console.log(`Found ${recentFiles.length} recent files from Nextcloud WebDAV`);
       return recentFiles;
     } catch (error) {
       console.error("Error fetching recent files:", error);

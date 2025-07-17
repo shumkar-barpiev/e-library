@@ -13,12 +13,12 @@ interface UseDashboardDataResult {
 }
 
 export function useDashboardData(): UseDashboardDataResult {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [isNextcloudConnected, setIsNextcloudConnected] = useState(false);
   const { user } = useAuth();
   const { credentials } = useAuthStore();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [isNextcloudConnected, setIsNextcloudConnected] = useState(false);
 
   // Mock data fallback
   const getMockData = (): DashboardStats => ({
@@ -144,7 +144,6 @@ export function useDashboardData(): UseDashboardDataResult {
           if (connectionTest) {
             // Get recent files from Nextcloud WebDAV (last 24 hours)
             const recentFiles = await nextcloudFilesService.getRecentFiles(5, 24);
-            console.log("Fetched recent files from Nextcloud WebDAV:", recentFiles);
 
             // Create dashboard stats with Nextcloud data
             dashboardData = {
