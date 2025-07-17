@@ -76,6 +76,13 @@ function DashboardContent() {
     );
   }
 
+  const tableHeaders = [
+    t("dashboard.activity.action"),
+    t("dashboard.activity.resource"),
+    t("dashboard.activity.user"),
+    t("dashboard.activity.time"),
+  ];
+
   return (
     <DashboardLayout>
       <Box sx={{ flexGrow: 1 }}>
@@ -86,7 +93,9 @@ function DashboardContent() {
         <Typography variant="subtitle1" color="text.secondary" gutterBottom>
           {t("dashboard.role")}: <Chip label={user?.role.toUpperCase()} size="small" />
           <Chip
-            label={isNextcloudConnected ? "Nextcloud Connected" : "Using Mock Data"}
+            label={
+              isNextcloudConnected ? t("dashboard.status.nextcloudConnected") : t("dashboard.status.usingMockData")
+            }
             size="small"
             color={isNextcloudConnected ? "success" : "warning"}
             sx={{ ml: 1 }}
@@ -95,7 +104,7 @@ function DashboardContent() {
 
         {error && (
           <Box sx={{ mb: 2 }}>
-            <Chip label={`Error: ${error}`} color="error" />
+            <Chip label={`${t("common.error")}: ${error}`} color="error" />
           </Box>
         )}
 
@@ -207,7 +216,9 @@ function DashboardContent() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  {isNextcloudConnected ? "Recent Files (Live from Nextcloud)" : "Recent Uploads (Sample Data)"}
+                  {isNextcloudConnected
+                    ? t("dashboard.sections.recentFilesLive")
+                    : t("dashboard.sections.recentUploadsSample")}
                 </Typography>
                 <List>
                   {stats?.recentUploads.map((file) => (
@@ -222,7 +233,9 @@ function DashboardContent() {
                             <Typography variant="body2" color="text.secondary">
                               {formatFileSize(file.size)} • {formatTimeAgo(file.uploadedAt)}
                             </Typography>
-                            {file.isPublic && <Chip label="Public" size="small" color="success" />}
+                            {file.isPublic && (
+                              <Chip label={t("dashboard.fileInfo.public")} size="small" color="success" />
+                            )}
                           </Box>
                         }
                       />
@@ -251,9 +264,11 @@ function DashboardContent() {
                         secondary={
                           <Box>
                             <Typography variant="body2" color="text.secondary">
-                              {file.downloadCount} downloads • {formatFileSize(file.size)}
+                              {file.downloadCount} {t("dashboard.fileInfo.downloads")} • {formatFileSize(file.size)}
                             </Typography>
-                            {file.isPublic && <Chip label="Public" size="small" color="success" />}
+                            {file.isPublic && (
+                              <Chip label={t("dashboard.fileInfo.public")} size="small" color="success" />
+                            )}
                           </Box>
                         }
                       />
@@ -276,10 +291,10 @@ function DashboardContent() {
                     <Table>
                       <TableHead>
                         <TableRow>
-                          <TableCell>Action</TableCell>
-                          <TableCell>Resource</TableCell>
-                          <TableCell>User</TableCell>
-                          <TableCell>Time</TableCell>
+                          <TableCell>{tableHeaders[0]}</TableCell>
+                          <TableCell>{tableHeaders[1]}</TableCell>
+                          <TableCell>{tableHeaders[2]}</TableCell>
+                          <TableCell>{tableHeaders[3]}</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -288,14 +303,16 @@ function DashboardContent() {
                             <TableCell>
                               <Box sx={{ display: "flex", alignItems: "center" }}>
                                 {getActionIcon(activity.action)}
-                                <Typography sx={{ ml: 1, textTransform: "capitalize" }}>{activity.action}</Typography>
+                                <Typography sx={{ ml: 1, textTransform: "capitalize" }}>
+                                  {t(`dashboard.actions.${activity.action}`)}
+                                </Typography>
                               </Box>
                             </TableCell>
                             <TableCell>{activity.resourceName}</TableCell>
                             <TableCell>
                               <Box sx={{ display: "flex", alignItems: "center" }}>
                                 <Avatar sx={{ width: 24, height: 24, mr: 1 }}>U</Avatar>
-                                User {activity.userId}
+                                {t("dashboard.activity.userLabel", { id: activity.userId })}
                               </Box>
                             </TableCell>
                             <TableCell>{formatTimeAgo(activity.timestamp)}</TableCell>

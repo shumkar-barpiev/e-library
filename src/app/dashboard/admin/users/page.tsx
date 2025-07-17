@@ -36,6 +36,7 @@ import { MoreVert, Add, Edit, Delete, PersonAdd, Security, Block, CheckCircle } 
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { User, UserRole } from "@/types/dms";
+import { useTranslation } from "react-i18next";
 
 interface UserFormData {
   email: string;
@@ -55,6 +56,7 @@ export default function UserManagementPage() {
 
 function UserManagementContent() {
   const { user, hasPermission } = useAuth();
+  const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -237,17 +239,17 @@ function UserManagementContent() {
     );
 
     return [
-      { role: "admin", count: stats.admin || 0, label: "Administrators" },
-      { role: "editors", count: stats.editors || 0, label: "Editors" },
-      { role: "users", count: stats.users || 0, label: "Users" },
-      { role: "guest", count: stats.guest || 0, label: "Guests" },
+      { role: "admin", count: stats.admin || 0, label: t("users.roles.admin") },
+      { role: "editors", count: stats.editors || 0, label: t("users.roles.editors") },
+      { role: "users", count: stats.users || 0, label: t("users.roles.users") },
+      { role: "guest", count: stats.guest || 0, label: t("users.roles.guest") },
     ];
   };
 
   if (!hasPermission("manage_users")) {
     return (
       <DashboardLayout>
-        <Alert severity="error">You don&apos;t have permission to manage users.</Alert>
+        <Alert severity="error">{t("users.noPermission")}</Alert>
       </DashboardLayout>
     );
   }
@@ -256,9 +258,9 @@ function UserManagementContent() {
     <DashboardLayout>
       <Box sx={{ flexGrow: 1 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-          <Typography variant="h4">User Management</Typography>
+          <Typography variant="h4">{t("users.title")}</Typography>
           <Button variant="contained" startIcon={<PersonAdd />} onClick={() => handleDialogOpen("create")}>
-            Add User
+            {t("users.addUser")}
           </Button>
         </Box>
 
@@ -282,19 +284,19 @@ function UserManagementContent() {
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              All Users ({users.length})
+              {t("users.allUsers", { count: users.length })}
             </Typography>
 
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>User</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Role</TableCell>
-                    <TableCell>Organization</TableCell>
-                    <TableCell>Created</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>{t("users.table.user")}</TableCell>
+                    <TableCell>{t("users.table.email")}</TableCell>
+                    <TableCell>{t("users.table.role")}</TableCell>
+                    <TableCell>{t("users.table.organization")}</TableCell>
+                    <TableCell>{t("users.table.created")}</TableCell>
+                    <TableCell>{t("users.table.actions")}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -318,7 +320,11 @@ function UserManagementContent() {
                       </TableCell>
                       <TableCell>{userRow.email}</TableCell>
                       <TableCell>
-                        <Chip label={userRow.role.toUpperCase()} color={getRoleColor(userRow.role)} size="small" />
+                        <Chip
+                          label={t(`users.roles.${userRow.role}`)}
+                          color={getRoleColor(userRow.role)}
+                          size="small"
+                        />
                       </TableCell>
                       <TableCell>{userRow.organization}</TableCell>
                       <TableCell>{formatDate(userRow.createdAt)}</TableCell>
@@ -342,32 +348,34 @@ function UserManagementContent() {
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
           <MenuItem onClick={() => handleDialogOpen("edit", selectedUser!)}>
             <Edit sx={{ mr: 1 }} />
-            Edit User
+            {t("users.edit")}
           </MenuItem>
           <MenuItem onClick={() => handleDialogOpen("delete", selectedUser!)} sx={{ color: "error.main" }}>
             <Delete sx={{ mr: 1 }} />
-            Delete User
+            {t("users.delete")}
           </MenuItem>
         </Menu>
 
         {/* User Dialog */}
         <Dialog open={dialogOpen} onClose={handleDialogClose} maxWidth="sm" fullWidth>
           <DialogTitle>
-            {dialogType === "create" && "Add New User"}
-            {dialogType === "edit" && "Edit User"}
-            {dialogType === "delete" && "Delete User"}
+            {dialogType === "create" && t("users.dialog.add")}
+            {dialogType === "edit" && t("users.dialog.edit")}
+            {dialogType === "delete" && t("users.dialog.delete")}
           </DialogTitle>
 
           <DialogContent>
             {dialogType === "delete" ? (
               <Typography>
-                Are you sure you want to delete user {selectedUser?.firstName} {selectedUser?.lastName}? This action
-                cannot be undone.
+                {t("users.dialog.confirmDelete", {
+                  firstName: selectedUser?.firstName,
+                  lastName: selectedUser?.lastName,
+                })}
               </Typography>
             ) : (
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
                 <TextField
-                  label="Email"
+                  label={t("users.table.email")}
                   type="email"
                   fullWidth
                   value={formData.email}
@@ -376,13 +384,13 @@ function UserManagementContent() {
 
                 <Box sx={{ display: "flex", gap: 2 }}>
                   <TextField
-                    label="First Name"
+                    label={t("users.table.firstName")}
                     fullWidth
                     value={formData.firstName}
                     onChange={(e) => setFormData((prev) => ({ ...prev, firstName: e.target.value }))}
                   />
                   <TextField
-                    label="Last Name"
+                    label={t("users.table.lastName")}
                     fullWidth
                     value={formData.lastName}
                     onChange={(e) => setFormData((prev) => ({ ...prev, lastName: e.target.value }))}
@@ -390,21 +398,21 @@ function UserManagementContent() {
                 </Box>
 
                 <FormControl fullWidth>
-                  <InputLabel>Role</InputLabel>
+                  <InputLabel>{t("users.table.role")}</InputLabel>
                   <Select
                     value={formData.role}
                     onChange={(e) => setFormData((prev) => ({ ...prev, role: e.target.value as UserRole }))}
-                    label="Role"
+                    label={t("users.table.role")}
                   >
-                    <MenuItem value="admin">Administrator</MenuItem>
-                    <MenuItem value="editors">Editor</MenuItem>
-                    <MenuItem value="users">User</MenuItem>
-                    <MenuItem value="guest">Guest</MenuItem>
+                    <MenuItem value="admin">{t("users.roles.admin")}</MenuItem>
+                    <MenuItem value="editors">{t("users.roles.editors")}</MenuItem>
+                    <MenuItem value="users">{t("users.roles.users")}</MenuItem>
+                    <MenuItem value="guest">{t("users.roles.guest")}</MenuItem>
                   </Select>
                 </FormControl>
 
                 <TextField
-                  label="Organization"
+                  label={t("users.table.organization")}
                   fullWidth
                   value={formData.organization}
                   onChange={(e) => setFormData((prev) => ({ ...prev, organization: e.target.value }))}
@@ -414,15 +422,15 @@ function UserManagementContent() {
           </DialogContent>
 
           <DialogActions>
-            <Button onClick={handleDialogClose}>Cancel</Button>
+            <Button onClick={handleDialogClose}>{t("common.cancel")}</Button>
             <Button
               onClick={handleFormSubmit}
               variant="contained"
               color={dialogType === "delete" ? "error" : "primary"}
             >
-              {dialogType === "create" && "Create User"}
-              {dialogType === "edit" && "Save Changes"}
-              {dialogType === "delete" && "Delete User"}
+              {dialogType === "create" && t("users.dialog.create")}
+              {dialogType === "edit" && t("users.dialog.save")}
+              {dialogType === "delete" && t("users.dialog.delete")}
             </Button>
           </DialogActions>
         </Dialog>

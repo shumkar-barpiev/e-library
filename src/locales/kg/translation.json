@@ -129,6 +129,16 @@
     "title": "Документтерди башкаруу системасы",
     "welcomeBack": "Кайра кош келдиңиз, {{name}}!",
     "role": "Роль",
+    "status": {
+      "dataSource": "Маалымат булагы",
+      "nextcloudConnected": "Nextcloud туташтырылды",
+      "usingMockData": "Тесттик маалыматтар колдонулууда",
+      "nextcloudTooltip": "Nextcloud Files API'ден реалдуу убакыттагы маалыматтар",
+      "refresh": "Маалыматты жаңыртуу",
+      "mockFallback": "Резерв катары тесттик маалыматтар колдонулууда.",
+      "showingRecent": "Сиздин мүмкүнчүлүктөрүңүзгө жараша акыркы файлдар көрсөтүлүүдө.",
+      "notAvailable": "Nextcloud туташуусу жок. Демонстрациялык маалыматтар көрсөтүлүүдө."
+    },
     "stats": {
       "totalFiles": "Жалпы файлдар",
       "totalFolders": "Жалпы папкалар",
@@ -136,6 +146,8 @@
       "recentUploads": "Акыркы жүктөөлөр"
     },
     "sections": {
+      "recentFilesLive": "Акыркы файлдар (Live Nextcloud)",
+      "recentUploadsSample": "Акыркы жүктөөлөр (Тесттик маалыматтар)",
       "recentUploads": "Акыркы жүктөөлөр",
       "popularFiles": "Популярдуу файлдар",
       "activityLog": "Активдүүлүк журналы"
@@ -144,7 +156,15 @@
       "uploadedBy": "Жүктөгөн",
       "size": "Өлчөмү",
       "downloads": "Жүктөлүүлөр",
-      "timeAgo": "{{time}} мурун"
+      "timeAgo": "{{time}} мурун",
+      "public": "Ачык"
+    },
+    "activity": {
+      "action": "Аракет",
+      "resource": "Ресурс",
+      "user": "Колдонуучу",
+      "userLabel": "Колдонуучу {{id}}",
+      "time": "Убакыт"
     },
     "actions": {
       "upload": "жүктөө",
@@ -241,11 +261,15 @@
   "settings": {
     "title": "Тууралоолор",
     "description": "Эсебиңиздин параметрлерин тууралаңыз",
-    "profile": "Профиль",
-    "firstName": "Аты",
-    "lastName": "Фамилиясы",
-    "email": "Электрондук почта",
-    "organization": "Уюм",
+    "profile": {
+      "title": "Профиль",
+      "firstName": "Аты",
+      "lastName": "Фамилиясы",
+      "email": "Электрондук почта",
+      "organization": "Уюм",
+      "changeAvatar": "Аватарды алмаштыруу",
+      "save": "Профилди сактоо"
+    },
     "preferences": "Артыкчылыктар",
     "language": "Тил",
     "notifications": "Эскертүүлөр",
@@ -256,6 +280,12 @@
     "languages": {
       "ru": "Орусча",
       "kg": "Кыргызча"
+    },
+    "tabs": {
+      "profile": "Профиль",
+      "notifications": "Эскертүүлөр",
+      "preferences": "Артыкчылыктар",
+      "security": "Коопсуздук"
     }
   },
   "errors": {

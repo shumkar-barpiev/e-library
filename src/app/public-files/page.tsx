@@ -54,7 +54,7 @@ export default function PublicFilesPage() {
         {
           id: 1,
           name: "company_brochure.pdf",
-          originalName: "Company Brochure 2024.pdf",
+          originalName: t("publicFiles.mock.companyBrochure"),
           mimeType: "application/pdf",
           size: 2048000,
           path: "/public/marketing/",
@@ -64,12 +64,12 @@ export default function PublicFilesPage() {
           isPublic: true,
           downloadCount: 245,
           tags: ["brochure", "marketing", "company"],
-          description: "Official company brochure with product information",
+          description: t("publicFiles.mock.companyBrochureDesc"),
         },
         {
           id: 2,
           name: "employee_handbook.pdf",
-          originalName: "Employee Handbook.pdf",
+          originalName: t("publicFiles.mock.employeeHandbook"),
           mimeType: "application/pdf",
           size: 1536000,
           path: "/public/hr/",
@@ -79,12 +79,12 @@ export default function PublicFilesPage() {
           isPublic: true,
           downloadCount: 156,
           tags: ["handbook", "hr", "policies"],
-          description: "Employee handbook and company policies",
+          description: t("publicFiles.mock.employeeHandbookDesc"),
         },
         {
           id: 3,
           name: "product_catalog.pdf",
-          originalName: "Product Catalog 2024.pdf",
+          originalName: t("publicFiles.mock.productCatalog"),
           mimeType: "application/pdf",
           size: 5120000,
           path: "/public/products/",
@@ -94,12 +94,12 @@ export default function PublicFilesPage() {
           isPublic: true,
           downloadCount: 89,
           tags: ["catalog", "products", "pricing"],
-          description: "Complete product catalog with pricing",
+          description: t("publicFiles.mock.productCatalogDesc"),
         },
         {
           id: 4,
           name: "company_logo.png",
-          originalName: "Company Logo High Resolution.png",
+          originalName: t("publicFiles.mock.companyLogo"),
           mimeType: "image/png",
           size: 512000,
           path: "/public/brand/",
@@ -109,43 +109,42 @@ export default function PublicFilesPage() {
           isPublic: true,
           downloadCount: 324,
           tags: ["logo", "brand", "image"],
-          description: "High resolution company logo for media use",
+          description: t("publicFiles.mock.companyLogoDesc"),
         },
       ];
-
       const mockPublicFolders: FolderType[] = [
         {
           id: 1,
-          name: "Marketing Materials",
+          name: t("publicFiles.mock.marketingMaterials"),
           path: "/public/marketing",
           parentId: undefined,
           createdBy: 1,
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 60),
           updatedAt: new Date(),
           isPublic: true,
-          description: "Public marketing materials and brochures",
+          description: t("publicFiles.mock.marketingMaterialsDesc"),
         },
         {
           id: 2,
-          name: "Brand Assets",
+          name: t("publicFiles.mock.brandAssets"),
           path: "/public/brand",
           parentId: undefined,
           createdBy: 1,
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90),
           updatedAt: new Date(),
           isPublic: true,
-          description: "Company logos, fonts, and brand guidelines",
+          description: t("publicFiles.mock.brandAssetsDesc"),
         },
         {
           id: 3,
-          name: "Product Information",
+          name: t("publicFiles.mock.productInformation"),
           path: "/public/products",
           parentId: undefined,
           createdBy: 2,
           createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
           updatedAt: new Date(),
           isPublic: true,
-          description: "Product catalogs and specifications",
+          description: t("publicFiles.mock.productInformationDesc"),
         },
       ];
 
@@ -332,7 +331,7 @@ export default function PublicFilesPage() {
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }} component="div">
                     {folder.description}
                   </Typography>
-                  <Chip label="Public Folder" size="small" color="success" />
+                  <Chip label={t("publicFiles.publicFolder")} size="small" color="success" />
                 </CardContent>
               </Card>
             </Grid>
@@ -413,16 +412,9 @@ export default function PublicFilesPage() {
           </MenuItem>
           <MenuItem onClick={handleMenuClose}>
             <Share sx={{ mr: 1 }} />
-            Share Link
+            {t("common.share")}
           </MenuItem>
         </Menu>
-
-        {/* Footer */}
-        <Box sx={{ mt: 8, py: 4, textAlign: "center", borderTop: "1px solid", borderColor: "divider" }}>
-          <Typography variant="body2" color="text.secondary" component="div">
-            © 2024 E-Library Document Management System. All rights reserved.
-          </Typography>
-        </Box>
       </Container>
     </Box>
   );

@@ -25,6 +25,7 @@ import {
 import { Person, Security, Notifications, Storage, Save, Edit } from "@mui/icons-material";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,6 +51,7 @@ function TabPanel(props: TabPanelProps) {
 
 export default function SettingsPage() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const [profileData, setProfileData] = useState({
     firstName: user?.firstName || "",
@@ -119,28 +121,28 @@ export default function SettingsPage() {
     <DashboardLayout>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="h4" gutterBottom>
-          Settings
+          {t("settings.title")}
         </Typography>
 
         {saveStatus === "saved" && (
           <Alert severity="success" sx={{ mb: 2 }}>
-            Settings saved successfully!
+            {t("settings.saved")}
           </Alert>
         )}
 
         {saveStatus === "error" && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            Failed to save settings. Please try again.
+            {t("settings.saveError")}
           </Alert>
         )}
 
         <Paper sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs value={tabValue} onChange={handleTabChange}>
-              <Tab icon={<Person />} label="Profile" />
-              <Tab icon={<Notifications />} label="Notifications" />
-              <Tab icon={<Storage />} label="Preferences" />
-              <Tab icon={<Security />} label="Security" />
+              <Tab icon={<Person />} label={t("settings.tabs.profile")} />
+              <Tab icon={<Notifications />} label={t("settings.tabs.notifications")} />
+              <Tab icon={<Storage />} label={t("settings.tabs.preferences")} />
+              <Tab icon={<Security />} label={t("settings.tabs.security")} />
             </Tabs>
           </Box>
 
@@ -149,7 +151,7 @@ export default function SettingsPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Profile Information
+                  {t("settings.profile.title")}
                 </Typography>
 
                 <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
@@ -165,7 +167,7 @@ export default function SettingsPage() {
                       {user?.role.toUpperCase()}
                     </Typography>
                     <Button startIcon={<Edit />} size="small" sx={{ mt: 1 }}>
-                      Change Avatar
+                      {t("settings.profile.changeAvatar")}
                     </Button>
                   </Box>
                 </Box>
@@ -174,7 +176,7 @@ export default function SettingsPage() {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="First Name"
+                      label={t("settings.profile.firstName")}
                       value={profileData.firstName}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, firstName: e.target.value }))}
                     />
@@ -182,7 +184,7 @@ export default function SettingsPage() {
                   <Grid item xs={12} sm={6}>
                     <TextField
                       fullWidth
-                      label="Last Name"
+                      label={t("settings.profile.lastName")}
                       value={profileData.lastName}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, lastName: e.target.value }))}
                     />
@@ -190,7 +192,7 @@ export default function SettingsPage() {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
-                      label="Email"
+                      label={t("settings.profile.email")}
                       type="email"
                       value={profileData.email}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
@@ -199,7 +201,7 @@ export default function SettingsPage() {
                   <Grid item xs={12}>
                     <TextField
                       fullWidth
-                      label="Organization"
+                      label={t("settings.profile.organization")}
                       value={profileData.organization}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, organization: e.target.value }))}
                     />
@@ -213,7 +215,7 @@ export default function SettingsPage() {
                     onClick={handleProfileSave}
                     disabled={saveStatus === "saving"}
                   >
-                    {saveStatus === "saving" ? "Saving..." : "Save Profile"}
+                    {saveStatus === "saving" ? t("common.saving") : t("settings.profile.save")}
                   </Button>
                 </Box>
               </CardContent>
@@ -225,7 +227,7 @@ export default function SettingsPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Notification Preferences
+                  {t("settings.notifications.title")}
                 </Typography>
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -238,10 +240,10 @@ export default function SettingsPage() {
                         }
                       />
                     }
-                    label="Email notifications"
+                    label={t("settings.notifications.email")}
                   />
                   <Typography variant="body2" color="text.secondary" sx={{ ml: 4, mt: -1 }}>
-                    Receive email notifications for important updates
+                    {t("settings.notifications.emailDesc")}
                   </Typography>
 
                   <FormControlLabel
@@ -253,10 +255,10 @@ export default function SettingsPage() {
                         }
                       />
                     }
-                    label="File upload notifications"
+                    label={t("settings.notifications.upload")}
                   />
                   <Typography variant="body2" color="text.secondary" sx={{ ml: 4, mt: -1 }}>
-                    Get notified when files are uploaded or shared with you
+                    {t("settings.notifications.uploadDesc")}
                   </Typography>
 
                   <FormControlLabel
@@ -268,10 +270,10 @@ export default function SettingsPage() {
                         }
                       />
                     }
-                    label="Share notifications"
+                    label={t("settings.notifications.share")}
                   />
                   <Typography variant="body2" color="text.secondary" sx={{ ml: 4, mt: -1 }}>
-                    Receive notifications when files are shared with you
+                    {t("settings.notifications.shareDesc")}
                   </Typography>
 
                   <FormControlLabel
@@ -283,10 +285,10 @@ export default function SettingsPage() {
                         }
                       />
                     }
-                    label="System notifications"
+                    label={t("settings.notifications.system")}
                   />
                   <Typography variant="body2" color="text.secondary" sx={{ ml: 4, mt: -1 }}>
-                    Get notified about system maintenance and updates
+                    {t("settings.notifications.systemDesc")}
                   </Typography>
                 </Box>
 
@@ -297,7 +299,7 @@ export default function SettingsPage() {
                     onClick={handleNotificationsSave}
                     disabled={saveStatus === "saving"}
                   >
-                    {saveStatus === "saving" ? "Saving..." : "Save Notifications"}
+                    {saveStatus === "saving" ? t("common.saving") : t("settings.notifications.save")}
                   </Button>
                 </Box>
               </CardContent>
@@ -309,33 +311,33 @@ export default function SettingsPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Application Preferences
+                  {t("settings.preferences.title")}
                 </Typography>
 
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
-                      <InputLabel>Default View</InputLabel>
+                      <InputLabel>{t("settings.preferences.defaultView")}</InputLabel>
                       <Select
                         value={preferences.defaultView}
                         onChange={(e) => setPreferences((prev) => ({ ...prev, defaultView: e.target.value }))}
-                        label="Default View"
+                        label={t("settings.preferences.defaultView")}
                       >
-                        <MenuItem value="grid">Grid View</MenuItem>
-                        <MenuItem value="list">List View</MenuItem>
+                        <MenuItem value="grid">{t("settings.preferences.gridView")}</MenuItem>
+                        <MenuItem value="list">{t("settings.preferences.listView")}</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
-                      <InputLabel>Items per Page</InputLabel>
+                      <InputLabel>{t("settings.preferences.itemsPerPage")}</InputLabel>
                       <Select
                         value={preferences.itemsPerPage}
                         onChange={(e) =>
                           setPreferences((prev) => ({ ...prev, itemsPerPage: e.target.value as number }))
                         }
-                        label="Items per Page"
+                        label={t("settings.preferences.itemsPerPage")}
                       >
                         <MenuItem value={10}>10</MenuItem>
                         <MenuItem value={25}>25</MenuItem>
@@ -347,16 +349,14 @@ export default function SettingsPage() {
 
                   <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
-                      <InputLabel>Language</InputLabel>
+                      <InputLabel>{t("settings.preferences.language")}</InputLabel>
                       <Select
                         value={preferences.language}
                         onChange={(e) => setPreferences((prev) => ({ ...prev, language: e.target.value }))}
-                        label="Language"
+                        label={t("settings.preferences.language")}
                       >
-                        <MenuItem value="en">English</MenuItem>
-                        <MenuItem value="es">Spanish</MenuItem>
-                        <MenuItem value="fr">French</MenuItem>
-                        <MenuItem value="de">German</MenuItem>
+                        <MenuItem value="ru">{t("settings.languages.ru")}</MenuItem>
+                        <MenuItem value="kg">{t("settings.languages.kg")}</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -369,7 +369,7 @@ export default function SettingsPage() {
                           onChange={(e) => setPreferences((prev) => ({ ...prev, autoSave: e.target.checked }))}
                         />
                       }
-                      label="Auto-save changes"
+                      label={t("settings.preferences.autoSave")}
                     />
                   </Grid>
 
@@ -381,7 +381,7 @@ export default function SettingsPage() {
                           onChange={(e) => setPreferences((prev) => ({ ...prev, darkMode: e.target.checked }))}
                         />
                       }
-                      label="Dark mode (Coming soon)"
+                      label={t("settings.preferences.darkMode")}
                       disabled
                     />
                   </Grid>
@@ -394,7 +394,7 @@ export default function SettingsPage() {
                     onClick={handlePreferencesSave}
                     disabled={saveStatus === "saving"}
                   >
-                    {saveStatus === "saving" ? "Saving..." : "Save Preferences"}
+                    {saveStatus === "saving" ? t("common.saving") : t("settings.preferences.save")}
                   </Button>
                 </Box>
               </CardContent>
@@ -406,38 +406,43 @@ export default function SettingsPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  Security Settings
+                  {t("settings.security.title")}
                 </Typography>
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="subtitle1" gutterBottom>
-                        Change Password
+                        {t("settings.security.changePassword")}
                       </Typography>
                       <Grid container spacing={2}>
                         <Grid item xs={12}>
                           <TextField
                             fullWidth
                             type="password"
-                            label="Current Password"
-                            placeholder="Enter your current password"
+                            label={t("settings.security.currentPassword")}
+                            placeholder={t("settings.security.enterCurrentPassword")}
                           />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                          <TextField fullWidth type="password" label="New Password" placeholder="Enter new password" />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                           <TextField
                             fullWidth
                             type="password"
-                            label="Confirm New Password"
-                            placeholder="Confirm new password"
+                            label={t("settings.security.newPassword")}
+                            placeholder={t("settings.security.enterNewPassword")}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            fullWidth
+                            type="password"
+                            label={t("settings.security.confirmNewPassword")}
+                            placeholder={t("settings.security.confirmNewPassword")}
                           />
                         </Grid>
                       </Grid>
                       <Button variant="outlined" sx={{ mt: 2 }}>
-                        Update Password
+                        {t("settings.security.updatePassword")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -445,10 +450,10 @@ export default function SettingsPage() {
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="subtitle1" gutterBottom>
-                        Active Sessions
+                        {t("settings.security.activeSessions")}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" gutterBottom>
-                        Monitor and manage your active sessions
+                        {t("settings.security.activeSessionsDesc")}
                       </Typography>
 
                       <Box sx={{ mt: 2 }}>
@@ -464,19 +469,19 @@ export default function SettingsPage() {
                           }}
                         >
                           <Box>
-                            <Typography variant="body1">Current Session</Typography>
+                            <Typography variant="body1">{t("settings.security.currentSession")}</Typography>
                             <Typography variant="body2" color="text.secondary">
-                              Windows • Chrome • Active now
+                              Windows • Chrome • {t("settings.security.activeNow")}
                             </Typography>
                           </Box>
                           <Typography variant="body2" color="success.main">
-                            Current
+                            {t("settings.security.current")}
                           </Typography>
                         </Box>
                       </Box>
 
                       <Button variant="outlined" color="error" sx={{ mt: 2 }}>
-                        Sign Out All Other Sessions
+                        {t("settings.security.signOutAllOtherSessions")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -484,21 +489,21 @@ export default function SettingsPage() {
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="subtitle1" gutterBottom>
-                        Account Information
+                        {t("settings.security.accountInformation")}
                       </Typography>
                       <Typography variant="body2" color="text.secondary" gutterBottom>
-                        Your account details and role information
+                        {t("settings.security.accountInformationDesc")}
                       </Typography>
 
                       <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
                         <Typography variant="body2">
-                          <strong>User ID:</strong> {user?.id}
+                          <strong>{t("settings.security.userId")}:</strong> {user?.id}
                         </Typography>
                         <Typography variant="body2">
-                          <strong>Role:</strong> {user?.role.toUpperCase()}
+                          <strong>{t("settings.security.role")}:</strong> {user?.role.toUpperCase()}
                         </Typography>
                         <Typography variant="body2">
-                          <strong>Account Created:</strong>{" "}
+                          <strong>{t("settings.security.accountCreated")}:</strong>{" "}
                           {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
                         </Typography>
                       </Box>

@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, Typography, Box, Chip, IconButton, Tooltip, Alert } from "@mui/material";
 import { Refresh, CloudDone, CloudOff, Info } from "@mui/icons-material";
 import { customColors } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
 interface NextcloudStatusWidgetProps {
   isConnected: boolean;
@@ -16,6 +17,8 @@ export const NextcloudStatusWidget: React.FC<NextcloudStatusWidgetProps> = ({
   onRefresh,
   refreshing = false,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Card
       sx={{
@@ -37,16 +40,16 @@ export const NextcloudStatusWidget: React.FC<NextcloudStatusWidgetProps> = ({
 
             <Box>
               <Typography variant="h6" sx={{ color: customColors.charcoal }}>
-                Data Source
+                {t("dashboard.status.dataSource")}
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Chip
-                  label={isConnected ? "Nextcloud Connected" : "Mock Data"}
+                  label={isConnected ? t("dashboard.status.nextcloudConnected") : t("dashboard.status.usingMockData")}
                   size="small"
                   color={isConnected ? "success" : "warning"}
                 />
                 {isConnected && (
-                  <Tooltip title="Real-time data from Nextcloud Files API">
+                  <Tooltip title={t("dashboard.status.nextcloudTooltip")}>
                     <Info sx={{ fontSize: 16, color: customColors.muted }} />
                   </Tooltip>
                 )}
@@ -56,7 +59,7 @@ export const NextcloudStatusWidget: React.FC<NextcloudStatusWidgetProps> = ({
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {onRefresh && (
-              <Tooltip title="Refresh data">
+              <Tooltip title={t("dashboard.status.refresh")}>
                 <IconButton
                   onClick={onRefresh}
                   disabled={refreshing}
@@ -94,19 +97,21 @@ export const NextcloudStatusWidget: React.FC<NextcloudStatusWidgetProps> = ({
               )
             }
           >
-            <Typography variant="body2">{error}. Using mock data as fallback.</Typography>
+            <Typography variant="body2">
+              {error}. {t("dashboard.status.mockFallback")}
+            </Typography>
           </Alert>
         )}
 
         {isConnected && (
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Showing recent files from Nextcloud based on your access permissions.
+            {t("dashboard.status.showingRecent")}
           </Typography>
         )}
 
         {!isConnected && !error && (
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Nextcloud connection not available. Displaying sample data for demonstration.
+            {t("dashboard.status.notAvailable")}
           </Typography>
         )}
       </CardContent>
