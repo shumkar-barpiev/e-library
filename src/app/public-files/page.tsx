@@ -1,174 +1,44 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Chip,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Menu,
-  MenuItem,
-  Alert,
-  Container,
-  AppBar,
-  Toolbar,
-  Button,
-  Stack,
-} from "@mui/material";
-import { Search, Download, Share, MoreVert, InsertDriveFile, Folder, Public, Home } from "@mui/icons-material";
+import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { FileMetadata, Folder as FolderType } from "@/types/dms";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
+import React, { useState, useEffect } from "react";
+import { FileText, ImageIcon, Video, Music, FileArchive } from "lucide-react";
+import { Search, Download, Share, MoreVert, Home } from "@mui/icons-material";
+import { FileIcon, FileSpreadsheet, Folder, Presentation } from "lucide-react";
+import { nextcloudPublicFilesService, PublicFile } from "@/services/nextcloud-public-files";
+import { Box, Card, CardContent, Typography, Grid, Button, IconButton, Stack } from "@mui/material";
+import { Menu, MenuItem, Container, AppBar, Toolbar, TextField, InputAdornment } from "@mui/material";
 
 export default function PublicFilesPage() {
   const router = useRouter();
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const [files, setFiles] = useState<FileMetadata[]>([]);
-  const [folders, setFolders] = useState<FolderType[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedItem, setSelectedItem] = useState<{ type: "file" | "folder"; id: number } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [files, setFiles] = useState<PublicFile[]>([]);
+  const [selectedMime, setSelectedMime] = useState<string>("");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [filteredFiles, setFilteredFiles] = useState<PublicFile[]>([]);
+  const [selectedItem, setSelectedItem] = useState<{ type: "file" | "folder"; id: number } | null>(null);
 
-  useEffect(() => {
-    loadPublicContent();
-  }, []);
-
-  const loadPublicContent = async () => {
-    setLoading(true);
+  const fetchFiles = async () => {
+    // Example: fetch from API and set files
     try {
-      // Mock public files and folders
-      const mockPublicFiles: FileMetadata[] = [
-        {
-          id: 1,
-          name: "company_brochure.pdf",
-          originalName: t("publicFiles.mock.companyBrochure"),
-          mimeType: "application/pdf",
-          size: 2048000,
-          path: "/public/marketing/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 245,
-          tags: ["brochure", "marketing", "company"],
-          description: t("publicFiles.mock.companyBrochureDesc"),
-        },
-        {
-          id: 2,
-          name: "employee_handbook.pdf",
-          originalName: t("publicFiles.mock.employeeHandbook"),
-          mimeType: "application/pdf",
-          size: 1536000,
-          path: "/public/hr/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14),
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 156,
-          tags: ["handbook", "hr", "policies"],
-          description: t("publicFiles.mock.employeeHandbookDesc"),
-        },
-        {
-          id: 3,
-          name: "product_catalog.pdf",
-          originalName: t("publicFiles.mock.productCatalog"),
-          mimeType: "application/pdf",
-          size: 5120000,
-          path: "/public/products/",
-          uploadedBy: 2,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 89,
-          tags: ["catalog", "products", "pricing"],
-          description: t("publicFiles.mock.productCatalogDesc"),
-        },
-        {
-          id: 4,
-          name: "company_logo.png",
-          originalName: t("publicFiles.mock.companyLogo"),
-          mimeType: "image/png",
-          size: 512000,
-          path: "/public/brand/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 324,
-          tags: ["logo", "brand", "image"],
-          description: t("publicFiles.mock.companyLogoDesc"),
-        },
-      ];
-      const mockPublicFolders: FolderType[] = [
-        {
-          id: 1,
-          name: t("publicFiles.mock.marketingMaterials"),
-          path: "/public/marketing",
-          parentId: undefined,
-          createdBy: 1,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 60),
-          updatedAt: new Date(),
-          isPublic: true,
-          description: t("publicFiles.mock.marketingMaterialsDesc"),
-        },
-        {
-          id: 2,
-          name: t("publicFiles.mock.brandAssets"),
-          path: "/public/brand",
-          parentId: undefined,
-          createdBy: 1,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90),
-          updatedAt: new Date(),
-          isPublic: true,
-          description: t("publicFiles.mock.brandAssetsDesc"),
-        },
-        {
-          id: 3,
-          name: t("publicFiles.mock.productInformation"),
-          path: "/public/products",
-          parentId: undefined,
-          createdBy: 2,
-          createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
-          updatedAt: new Date(),
-          isPublic: true,
-          description: t("publicFiles.mock.productInformationDesc"),
-        },
-      ];
-
-      setFiles(mockPublicFiles);
-      setFolders(mockPublicFolders);
-    } catch (error) {
-      console.error("Failed to load public content:", error);
-    } finally {
+      const publicFiles = await nextcloudPublicFilesService.getPublicFiles();
       setLoading(false);
+      setFiles(publicFiles);
+      setFilteredFiles(publicFiles);
+    } catch (error) {
+      setFiles([]);
     }
   };
 
-  const filteredFiles = files.filter(
-    (file) =>
-      file.originalName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      file.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      file.tags?.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
-  const filteredFolders = folders.filter(
-    (folder) =>
-      folder.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      folder.description?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    fetchFiles();
+  }, []);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, type: "file" | "folder", id: number) => {
     setAnchorEl(event.currentTarget);
@@ -180,11 +50,8 @@ export default function PublicFilesPage() {
     setSelectedItem(null);
   };
 
-  const handleDownload = (file: FileMetadata) => {
-    // TODO: Implement actual download functionality
-    console.log("Downloading file:", file.originalName);
-    // Update download count
-    setFiles((prev) => prev.map((f) => (f.id === file.id ? { ...f, downloadCount: f.downloadCount + 1 } : f)));
+  const handleDownload = (file: any) => {
+    window.open(`/api/nextcloud/public-files/download?file=${encodeURIComponent(file.filename)}`, "_blank");
   };
 
   const formatFileSize = (bytes: number): string => {
@@ -194,10 +61,10 @@ export default function PublicFilesPage() {
     return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + " " + sizes[i];
   };
 
-  const formatTimeAgo = (date: Date): string => {
+  const formatTimeAgo = (dateString: string): string => {
+    const date = new Date(dateString);
     const now = new Date();
     const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-
     if (diffInDays === 0) {
       return "Today";
     } else if (diffInDays === 1) {
@@ -211,15 +78,30 @@ export default function PublicFilesPage() {
     }
   };
 
-  const getFileIcon = (mimeType: string) => {
-    if (mimeType.includes("pdf")) return "📄";
-    if (mimeType.includes("image")) return "🖼️";
-    if (mimeType.includes("video")) return "🎥";
-    if (mimeType.includes("audio")) return "🎵";
-    if (mimeType.includes("document")) return "📝";
-    if (mimeType.includes("presentation")) return "📈";
-    if (mimeType.includes("spreadsheet")) return "📊";
-    return "📁";
+  const getFileIcon = (mimeType: string): ReactNode => {
+    if (!mimeType) return <Folder size={32} />;
+    if (mimeType === "application/pdf") return <FileText size={32} />;
+    if (mimeType.startsWith("image/")) return <ImageIcon size={32} />;
+    if (mimeType.startsWith("video/")) return <Video size={32} />;
+    if (mimeType.startsWith("audio/")) return <Music size={32} />;
+    if (
+      mimeType === "application/msword" ||
+      mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+      return <FileText size={32} />;
+    if (
+      mimeType === "application/vnd.ms-excel" ||
+      mimeType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+      return <FileSpreadsheet size={32} />;
+    if (
+      mimeType === "application/vnd.ms-powerpoint" ||
+      mimeType === "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    )
+      return <Presentation size={32} />;
+    if (mimeType.includes("zip") || mimeType.includes("rar") || mimeType.includes("compressed"))
+      return <FileArchive size={32} />;
+    return <FileIcon size={32} />;
   };
 
   const handleNavigateToHome = () => {
@@ -230,9 +112,28 @@ export default function PublicFilesPage() {
     }
   };
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      let filtered = files;
+      if (searchQuery) {
+        const lowerQuery = searchQuery.toLowerCase();
+        filtered = filtered.filter(
+          (file) => file.basename.toLowerCase().includes(lowerQuery) || file.mime.toLowerCase().includes(lowerQuery)
+        );
+      }
+      if (selectedMime && selectedMime !== t("files.allTypes")) {
+        filtered = filtered.filter((file) => file.mime === selectedMime);
+      }
+      setFilteredFiles(filtered);
+    }, 400);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery, selectedMime, files]);
+
   return (
     <Box sx={{ minHeight: "100vh", backgroundColor: "grey.50" }}>
-      {/* Header */}
       <AppBar position="static" color="primary">
         <Toolbar>
           <Button color="inherit" startIcon={<Home />} onClick={handleNavigateToHome}>
@@ -242,7 +143,6 @@ export default function PublicFilesPage() {
       </AppBar>
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        {/* Welcome Section */}
         <Box sx={{ mb: 4, textAlign: "center" }}>
           <Typography variant="h3" gutterBottom>
             {t("publicFiles.title")}
@@ -254,127 +154,75 @@ export default function PublicFilesPage() {
 
         {/* Search Bar */}
         <Card sx={{ mb: 4 }}>
-          <CardContent>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder={t("files.search")}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search />
-                  </InputAdornment>
-                ),
-              }}
-            />
+          <CardContent sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              alignItems={"center"}
+              justifyContent={"center"}
+              sx={{ width: 1 }}
+              gap={2}
+            >
+              <TextField
+                sx={{ width: "70%" }}
+                variant="outlined"
+                placeholder={t("files.search")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                select
+                label={t("files.filterByType") || "Type"}
+                value={selectedMime}
+                onChange={(e) => setSelectedMime(e.target.value)}
+                sx={{ width: "30%" }}
+                variant="outlined"
+              >
+                <MenuItem value={t("files.allTypes")}>{t("files.allTypes") || "All Types"}</MenuItem>
+                <MenuItem value="application/pdf">PDF</MenuItem>
+                <MenuItem value="image/png">PNG</MenuItem>
+                <MenuItem value="image/jpeg">JPEG</MenuItem>
+                <MenuItem value="image/svg+xml">SVG</MenuItem>
+                <MenuItem value="text/plain">Text</MenuItem>
+                <MenuItem value="audio/mpeg">MP3</MenuItem>
+                <MenuItem value="video/mp4">MP4</MenuItem>
+                <MenuItem value="application/msword">Word</MenuItem>
+                <MenuItem value="application/vnd.ms-excel">Excel</MenuItem>
+                <MenuItem value="application/vnd.ms-powerpoint">PowerPoint</MenuItem>
+              </TextField>
+            </Stack>
           </CardContent>
         </Card>
 
-        {/* Statistics */}
-        <Box sx={{ display: "flex", gap: 2, mb: 4, justifyContent: "center" }}>
-          <Card sx={{ textAlign: "center", minWidth: 120 }}>
-            <CardContent>
-              <Typography variant="h4" color="primary">
-                {filteredFiles.length}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" component="div">
-                {t("navigation.publicFiles")}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card sx={{ textAlign: "center", minWidth: 120 }}>
-            <CardContent>
-              <Typography variant="h4" color="warning.main">
-                {filteredFolders.length}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" component="div">
-                {t("files.fileName")}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card sx={{ textAlign: "center", minWidth: 120 }}>
-            <CardContent>
-              <Typography variant="h4" color="success.main">
-                {files.reduce((sum, file) => sum + file.downloadCount, 0)}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" component="div">
-                {t("dashboard.fileInfo.downloads")}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Box>
-
         {/* Content Grid */}
         <Grid container spacing={3}>
-          {/* Folders */}
-          {filteredFolders.map((folder) => (
-            <Grid item xs={12} sm={6} md={4} key={`folder-${folder.id}`}>
-              <Card sx={{ cursor: "pointer", height: "100%" }}>
-                <CardContent>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "start", mb: 2 }}>
-                    <Folder sx={{ fontSize: 40, color: "warning.main" }} />
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleMenuOpen(e, "folder", folder.id);
-                      }}
-                    >
-                      <MoreVert />
-                    </IconButton>
-                  </Box>
-                  <Typography variant="h6" gutterBottom noWrap>
-                    {folder.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }} component="div">
-                    {folder.description}
-                  </Typography>
-                  <Chip label={t("publicFiles.publicFolder")} size="small" color="success" />
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-
-          {/* Files */}
-          {filteredFiles.map((file) => (
-            <Grid item xs={12} sm={6} md={4} key={`file-${file.id}`}>
+          {filteredFiles.map((file, index) => (
+            <Grid item xs={12} sm={6} md={4} key={`file-${file.filename}`}>
               <Card sx={{ height: "100%" }}>
                 <CardContent>
                   <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "start", mb: 2 }}>
-                    <Box sx={{ fontSize: "40px" }}>{getFileIcon(file.mimeType)}</Box>
-                    <IconButton size="small" onClick={(e) => handleMenuOpen(e, "file", file.id)}>
+                    <Box sx={{ fontSize: "40px" }}>{getFileIcon(file.mime)}</Box>
+                    <IconButton size="small" onClick={(e) => handleMenuOpen(e, "file", index)}>
                       <MoreVert />
                     </IconButton>
                   </Box>
-
-                  <Typography variant="h6" gutterBottom noWrap title={file.originalName}>
-                    {file.originalName}
+                  <Typography variant="h6" gutterBottom noWrap title={file.basename}>
+                    {file.basename}
                   </Typography>
-
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }} component="div">
-                    {file.description}
+                    {file.mime}
                   </Typography>
-
                   <Box sx={{ mb: 2 }}>
                     <Typography variant="body2" color="text.secondary" component="div">
-                      {formatFileSize(file.size)} • {formatTimeAgo(file.uploadedAt)}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" component="div">
-                      {file.downloadCount} {t("dashboard.fileInfo.downloads")}
+                      {formatFileSize(file.size)} • {formatTimeAgo(file.lastmod)}
                     </Typography>
                   </Box>
-
-                  {file.tags && file.tags.length > 0 && (
-                    <Box sx={{ mb: 2 }}>
-                      {file.tags.slice(0, 3).map((tag) => (
-                        <Chip key={tag} label={tag} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
-                      ))}
-                      {file.tags.length > 3 && <Chip label={`+${file.tags.length - 3}`} size="small" />}
-                    </Box>
-                  )}
-
                   <Button variant="contained" startIcon={<Download />} fullWidth onClick={() => handleDownload(file)}>
                     {t("common.download")}
                   </Button>
@@ -385,7 +233,7 @@ export default function PublicFilesPage() {
         </Grid>
 
         {/* No Results */}
-        {filteredFiles.length === 0 && filteredFolders.length === 0 && !loading && (
+        {filteredFiles.length === 0 && !loading && (
           <Box sx={{ textAlign: "center", py: 8 }}>
             <Typography variant="h5" color="text.secondary" gutterBottom component="div">
               {t("publicFiles.noPublicFiles")}
@@ -401,7 +249,7 @@ export default function PublicFilesPage() {
           <MenuItem
             onClick={() => {
               if (selectedItem?.type === "file") {
-                const file = files.find((f) => f.id === selectedItem.id);
+                const file = filteredFiles[selectedItem.id];
                 if (file) handleDownload(file);
               }
               handleMenuClose();

@@ -191,7 +191,9 @@
     "creating": "Түзүлүүдө...",
     "uploading": "Жүктөлүүдө...",
     "selectFile": "Файл тандоо",
-    "rootFolder": "Түп папка"
+    "rootFolder": "Түп папка",
+    "filterByType": "Түрү боюнча чыпкалоо",
+    "allTypes": "Бардык түрлөр"
   },
   "upload": {
     "title": "Файлдарды жүктөө",

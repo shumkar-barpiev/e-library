@@ -190,7 +190,9 @@
     "creating": "Создание...",
     "uploading": "Загрузка...",
     "selectFile": "Выберите файл",
-    "rootFolder": "Корневая папка"
+    "rootFolder": "Корневая папка",
+    "filterByType": "Фильтр по типу",
+    "allTypes": "Все типы"
   },
   "upload": {
     "title": "Загрузить файлы",
