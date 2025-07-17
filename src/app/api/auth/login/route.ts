@@ -130,7 +130,6 @@ async function getUserInfo(username: string, appPassword: string): Promise<Nextc
     }
 
     const data = await response.json();
-    console.log(data);
     return data.ocs.data;
   } catch (error) {
     console.error("Error fetching user info:", error);

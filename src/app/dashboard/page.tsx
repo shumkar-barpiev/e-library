@@ -1,34 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import AuthGuard from "@/components/auth/AuthGuard";
-import {
-  Box,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Chip,
-  LinearProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Avatar,
-} from "@mui/material";
-import { InsertDriveFile, Folder, CloudUpload, Download, TrendingUp } from "@mui/icons-material";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { useAuth } from "@/contexts/AuthContext";
-import { DashboardStats, ActivityLog, FileMetadata } from "@/types/dms";
 import { customColors } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
+import React from "react";
+import AuthGuard from "@/components/auth/AuthGuard";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Box, Grid, Card, CardContent, Typography, List } from "@mui/material";
+import { ListItem, ListItemText, ListItemIcon, Chip, LinearProgress } from "@mui/material";
+import { InsertDriveFile, Folder, CloudUpload, Download, TrendingUp } from "@mui/icons-material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Avatar } from "@mui/material";
+import { useDashboardData } from "@/hooks/useDashboardData";
+import { NextcloudStatusWidget } from "@/components/dashboard/NextcloudStatusWidget";
 
 export default function DashboardPage() {
   return (
@@ -41,118 +24,7 @@ export default function DashboardPage() {
 function DashboardContent() {
   const { user, hasPermission } = useAuth();
   const { t } = useTranslation();
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Mock data for dashboard stats
-    const mockStats: DashboardStats = {
-      totalFiles: 1245,
-      totalFolders: 89,
-      totalStorage: 15728640000, // 15GB in bytes
-      recentUploads: [
-        {
-          id: 1,
-          name: "annual_report_2024.pdf",
-          originalName: "Annual Report 2024.pdf",
-          mimeType: "application/pdf",
-          size: 2048000,
-          path: "/documents/reports/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-          updatedAt: new Date(),
-          isPublic: false,
-          downloadCount: 5,
-        },
-        {
-          id: 2,
-          name: "product_catalog.pdf",
-          originalName: "Product Catalog.pdf",
-          mimeType: "application/pdf",
-          size: 5120000,
-          path: "/documents/marketing/",
-          uploadedBy: 2,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 23,
-        },
-        {
-          id: 3,
-          name: "meeting_notes.docx",
-          originalName: "Meeting Notes.docx",
-          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          size: 256000,
-          path: "/documents/meetings/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 4), // 4 hours ago
-          updatedAt: new Date(),
-          isPublic: false,
-          downloadCount: 1,
-        },
-      ],
-      popularFiles: [
-        {
-          id: 4,
-          name: "employee_handbook.pdf",
-          originalName: "Employee Handbook.pdf",
-          mimeType: "application/pdf",
-          size: 1024000,
-          path: "/documents/hr/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7), // 1 week ago
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 156,
-        },
-        {
-          id: 5,
-          name: "company_policies.pdf",
-          originalName: "Company Policies.pdf",
-          mimeType: "application/pdf",
-          size: 512000,
-          path: "/documents/policies/",
-          uploadedBy: 1,
-          uploadedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14), // 2 weeks ago
-          updatedAt: new Date(),
-          isPublic: true,
-          downloadCount: 89,
-        },
-      ],
-      activityLog: [
-        {
-          id: 1,
-          userId: 1,
-          action: "upload",
-          resourceType: "file",
-          resourceId: 1,
-          resourceName: "annual_report_2024.pdf",
-          timestamp: new Date(Date.now() - 1000 * 60 * 30),
-        },
-        {
-          id: 2,
-          userId: 2,
-          action: "download",
-          resourceType: "file",
-          resourceId: 4,
-          resourceName: "employee_handbook.pdf",
-          timestamp: new Date(Date.now() - 1000 * 60 * 45),
-        },
-        {
-          id: 3,
-          userId: 1,
-          action: "move",
-          resourceType: "file",
-          resourceId: 3,
-          resourceName: "meeting_notes.docx",
-          timestamp: new Date(Date.now() - 1000 * 60 * 60),
-        },
-      ],
-    };
-
-    setStats(mockStats);
-    setLoading(false);
-  }, []);
+  const { stats, loading, error, isNextcloudConnected, refreshData } = useDashboardData();
 
   const formatFileSize = (bytes: number): string => {
     const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
@@ -213,9 +85,28 @@ function DashboardContent() {
 
         <Typography variant="subtitle1" color="text.secondary" gutterBottom>
           {t("dashboard.role")}: <Chip label={user?.role.toUpperCase()} size="small" />
+          <Chip
+            label={isNextcloudConnected ? "Nextcloud Connected" : "Using Mock Data"}
+            size="small"
+            color={isNextcloudConnected ? "success" : "warning"}
+            sx={{ ml: 1 }}
+          />
         </Typography>
 
-        {/* Stats Cards */}
+        {error && (
+          <Box sx={{ mb: 2 }}>
+            <Chip label={`Error: ${error}`} color="error" />
+          </Box>
+        )}
+
+        {/* Nextcloud Status Widget */}
+        <NextcloudStatusWidget
+          isConnected={isNextcloudConnected}
+          error={error}
+          onRefresh={refreshData}
+          refreshing={loading}
+        />
+
         <Grid container spacing={3} sx={{ mb: 4 }}>
           <Grid item xs={12} sm={6} md={3}>
             <Card
@@ -316,7 +207,7 @@ function DashboardContent() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  {t("dashboard.sections.recentUploads")}
+                  {isNextcloudConnected ? "Recent Files (Live from Nextcloud)" : "Recent Uploads (Sample Data)"}
                 </Typography>
                 <List>
                   {stats?.recentUploads.map((file) => (
