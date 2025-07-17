@@ -143,7 +143,7 @@ export function useDashboardData(): UseDashboardDataResult {
 
           if (connectionTest) {
             // Get recent files from Nextcloud WebDAV (last 24 hours)
-            const recentFiles = await nextcloudFilesService.getRecentFiles(5, 24);
+            const recentFiles = await nextcloudFilesService.getRecentFiles(5, 72);
 
             // Create dashboard stats with Nextcloud data
             dashboardData = {

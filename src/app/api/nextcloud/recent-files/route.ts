@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     // Get query parameters
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get("limit") || "10");
-    const hoursBack = parseInt(searchParams.get("hours") || "24");
+    const hoursBack = parseInt(searchParams.get("hours") || "72");
 
     console.log(`Fetching recent files for user: ${username}, last ${hoursBack} hours, limit: ${limit}`);
 
