@@ -79,11 +79,7 @@ export const LandingPage: React.FC = () => {
       title: t("landing.features.performance.title"),
       description: t("landing.features.performance.description"),
     },
-    {
-      icon: <Folder />,
-      title: t("landing.features.organization.title"),
-      description: t("landing.features.organization.description"),
-    },
+
     {
       icon: <People />,
       title: t("landing.features.collaboration.title"),
@@ -214,7 +210,7 @@ export const LandingPage: React.FC = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={4}>
+        <Grid container spacing={4} sx={{ justifyContent: "center" }}>
           {features.map((feature, index) => (
             <Grid item xs={12} md={6} lg={4} key={index}>
               <FeatureCard {...feature} />

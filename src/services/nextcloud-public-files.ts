@@ -14,7 +14,7 @@ export class NextcloudPublicFilesService {
    * @param shareToken The public share token from Nextcloud (example: "6Xq9d8TpPbcLMnf")
    */
   async getPublicFiles(): Promise<PublicFile[]> {
-    const shareToken = "6Xq9d8TpPbcLMnf";
+    const shareToken = process.env.NEXT_PUBLIC_NEXTCLOUD_PUBLIC_FOLDER_TOKEN;
     if (!shareToken) {
       console.error("Share token is required to fetch public files.");
       return [];

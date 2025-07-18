@@ -1,5 +1,5 @@
-import { SnackbarProvider } from "notistack";
 import { styled } from "@mui/system";
+import { SnackbarProvider } from "notistack";
 import { MaterialDesignContent } from "notistack";
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
