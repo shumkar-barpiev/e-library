@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,6 +14,19 @@ import { FileIcon, FileSpreadsheet, Folder, Presentation } from "lucide-react";
 import { nextcloudPublicFilesService, PublicFile } from "@/services/nextcloud-public-files";
 import { MenuItem, Container, AppBar, Toolbar, TextField, InputAdornment } from "@mui/material";
 import { Box, Card, CardContent, Typography, Grid, Button, IconButton, Stack } from "@mui/material";
+
+const mimeTypeGroups: Record<string, string[]> = {
+  pdf: ["application/pdf"],
+  image: ["image/png", "image/jpeg", "image/svg+xml", "image/gif", "image/jpg"],
+  audio: ["audio/mpeg", "audio/mp3"],
+  video: ["video/mp4"],
+  word: ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
+  excel: ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
+  powerpoint: [
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  ],
+};
 
 export default function Main() {
   const router = useRouter();
@@ -33,6 +47,31 @@ export default function Main() {
       setFilteredFiles(publicFiles);
     } catch (error) {
       setFiles([]);
+    }
+  };
+
+  const getFileTypeLabel = (file: PublicFile): string => {
+    const ext = file.basename.split(".").pop()?.toLowerCase();
+    switch (ext) {
+      case "png":
+      case "jpeg":
+      case "jpg":
+      case "gif":
+        return "Image";
+      case "mp3":
+        return "Audio";
+      case "mp4":
+        return "Video";
+      case "pdf":
+        return "PDF";
+      case "docx":
+        return "Word Document";
+      case "xlsx":
+        return "Excel Spreadsheet";
+      case "pptx":
+        return "PowerPoint Presentation";
+      default:
+        return file.mime;
     }
   };
 
@@ -86,29 +125,30 @@ export default function Main() {
   };
 
   const getFileIcon = (mimeType: string): ReactNode => {
-    if (!mimeType) return <Folder size={72} />;
-    if (mimeType === "application/pdf") return <FileText size={72} />;
-    if (mimeType.startsWith("image/")) return <ImageIcon size={72} />;
-    if (mimeType.startsWith("video/")) return <Video size={72} />;
-    if (mimeType.startsWith("audio/")) return <Music size={72} />;
+    if (!mimeType) return <Image src="/assets/mimeTypeIcons/imageIcon.png" alt="file" width={72} height={72} />;
+    if (mimeType === "application/pdf")
+      return <Image src="/assets/mimeTypeIcons/pdfIcon.png" alt="pdf" width={72} height={72} />;
+    if (mimeType.startsWith("image/"))
+      return <Image src="/assets/mimeTypeIcons/imageIcon.png" alt="image" width={72} height={72} />;
+    if (mimeType.startsWith("audio/"))
+      return <Image src="/assets/mimeTypeIcons/audioIcon.png" alt="audio" width={72} height={72} />;
     if (
       mimeType === "application/msword" ||
       mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
-      return <FileText size={72} />;
+      return <Image src="/assets/mimeTypeIcons/docxIcon.png" alt="docx" width={72} height={72} />;
     if (
       mimeType === "application/vnd.ms-excel" ||
       mimeType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
-      return <FileSpreadsheet size={72} />;
+      return <Image src="/assets/mimeTypeIcons/excelIcon.png" alt="excel" width={72} height={72} />;
     if (
       mimeType === "application/vnd.ms-powerpoint" ||
       mimeType === "application/vnd.openxmlformats-officedocument.presentationml.presentation"
     )
-      return <Presentation size={72} />;
-    if (mimeType.includes("zip") || mimeType.includes("rar") || mimeType.includes("compressed"))
-      return <FileArchive size={72} />;
-    return <FileIcon size={72} />;
+      return <Image src="/assets/mimeTypeIcons/pptxIcon.png" alt="pptx" width={72} height={72} />;
+    // fallback to generic image icon for unknown types
+    return <Image src="/assets/mimeTypeIcons/imageIcon.png" alt="file" width={72} height={72} />;
   };
 
   const handleNavigateToHome = () => {
@@ -128,8 +168,9 @@ export default function Main() {
           (file) => file.basename.toLowerCase().includes(lowerQuery) || file.mime.toLowerCase().includes(lowerQuery)
         );
       }
-      if (selectedMime && selectedMime !== t("files.allTypes")) {
-        filtered = filtered.filter((file) => file.mime === selectedMime);
+      if (selectedMime && selectedMime !== "all") {
+        const mimes = mimeTypeGroups[selectedMime] || [selectedMime];
+        filtered = filtered.filter((file) => mimes.includes(file.mime));
       }
       setFilteredFiles(filtered);
     }, 400);
@@ -191,17 +232,14 @@ export default function Main() {
                 sx={{ width: "30%" }}
                 variant="outlined"
               >
-                <MenuItem value={t("files.allTypes")}>{t("files.allTypes") || "All Types"}</MenuItem>
-                <MenuItem value="application/pdf">PDF</MenuItem>
-                <MenuItem value="image/png">PNG</MenuItem>
-                <MenuItem value="image/jpeg">JPEG</MenuItem>
-                <MenuItem value="image/svg+xml">SVG</MenuItem>
-                <MenuItem value="text/plain">Text</MenuItem>
-                <MenuItem value="audio/mpeg">MP3</MenuItem>
-                <MenuItem value="video/mp4">MP4</MenuItem>
-                <MenuItem value="application/msword">Word</MenuItem>
-                <MenuItem value="application/vnd.ms-excel">Excel</MenuItem>
-                <MenuItem value="application/vnd.ms-powerpoint">PowerPoint</MenuItem>
+                <MenuItem value="all">{t("files.allTypes") || "All Types"}</MenuItem>
+                <MenuItem value="pdf">PDF</MenuItem>
+                <MenuItem value="image">Image</MenuItem>
+                <MenuItem value="audio">Audio</MenuItem>
+                <MenuItem value="video">Video</MenuItem>
+                <MenuItem value="word">Word</MenuItem>
+                <MenuItem value="excel">Excel</MenuItem>
+                <MenuItem value="powerpoint">PowerPoint</MenuItem>
               </TextField>
             </Stack>
           </CardContent>
@@ -241,7 +279,7 @@ export default function Main() {
                     {file.basename}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 0 }} component="div">
-                    {file.mime}
+                    {getFileTypeLabel(file)}
                   </Typography>
                   <Box sx={{ mb: 1 }}>
                     <Typography variant="body2" color="text.secondary" component="div">
